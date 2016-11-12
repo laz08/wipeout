@@ -59,14 +59,14 @@ public class MoveVehicle : MonoBehaviour {
 		accZ *= -1;
 	}
 
-	/*void FixedUpdate() {
+	void FixedUpdate() {
 		//Hooving physics
 		Ray ray = new Ray (transform.position, -transform.up);
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, hoovingHeight)) {
 			/*float relativeHeight =(hoovingHeight- hit.distance) / hoovingHeight;
 			Vector3 forceToApply = Vector3.up * relativeHeight * hoovingForce;
-			vehicleRigidBody.AddForce (forceToApply, ForceMode.Acceleration);
+			vehicleRigidBody.AddForce (forceToApply, ForceMode.Acceleration);*/
 
 			if (hit.distance <=hoovingHeight) {//when is higher than the hooving height, not apply hooving force
 				Vector3 forceToApply = Vector3.up * -Physics.gravity.y*2*Time.deltaTime;
@@ -74,7 +74,7 @@ public class MoveVehicle : MonoBehaviour {
 				vehicleRigidBody.velocity = forceToApply;
 			}
 		}
-	}*/
+	}
 		
 }
 
