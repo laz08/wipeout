@@ -44,37 +44,48 @@ public class MoveVehicle : MonoBehaviour {
 			}
 		}
 			
-		gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime + (1/2)*accZ*Time.deltaTime*Time.deltaTime,Space.Self);
+		//gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime + (1/2)*accZ*Time.deltaTime*Time.deltaTime,Space.Self);
 
 		//Tiling
-		float turn = Input.GetAxis("Horizontal");
+		/*float turn = Input.GetAxis("Horizontal");
 		gameObject.transform.Rotate(0.0f, -actRotation,0.0f,Space.Self);
 		actRotation += turn*turnSpeed;
-		gameObject.transform.Rotate(0.0f, actRotation,0.0f,Space.Self);
+		gameObject.transform.Rotate(0.0f, actRotation,0.0f,Space.Self);*/
 	}
 		
 
 	void changeAccelerationDirection() {
-		speedZ = 0;
+		speedZ = -speedZ;
 		accZ *= -1;
 	}
 
 	void FixedUpdate() {
+		//vehicleRigidBody.AddRelativeForce (new Vector3 (0.0f, 0.0f, speedZ), ForceMode.VelocityChange);
+		vehicleRigidBody.AddRelativeForce(new Vector3 (0.0f, 0.0f, speedZ),ForceMode.Force);
+		//vehicleRigidBody.velocity = new Vector3 (0.0f, 0.0f, speedZ);
+		float turn = Input.GetAxis("Horizontal");
+		vehicleRigidBody.AddRelativeTorque (new Vector3(0.0f,turn*turnSpeed,0.0f));
+
+		Vector3 size = GetComponent<BoxCollider> ().bounds.size;
 		//Hooving physics
-		Ray ray = new Ray (transform.position, -transform.up);
+		Ray ray = new Ray (transform.position + new Vector3(0, 0, size.z/2) , -transform.up);
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, hoovingHeight)) {
-			/*float relativeHeight =(hoovingHeight- hit.distance) / hoovingHeight;
-			Vector3 forceToApply = Vector3.up * relativeHeight * hoovingForce;
-			vehicleRigidBody.AddForce (forceToApply, ForceMode.Acceleration);*/
-			Vector3 normal = Vector3.Normalize(hit.normal);
-			transform.up.Set(normal.x, normal.y, normal.z);
-			if (hit.distance <=hoovingHeight) {//when is higher than the hooving height, not apply hooving force
+			float relativeHeight =(hoovingHeight- hit.distance) / hoovingHeight;
+			Vector3 forceToApply =transform.up* relativeHeight * hoovingForce;
+			vehicleRigidBody.AddRelativeForce (forceToApply, ForceMode.Acceleration);
+
+			Vector3 normal = Vector3.Normalize (hit.normal);
+			Debug.Log ("normal" + normal);
+			transform.up = normal;
+			Debug.Log ("up" + transform.up);
+			//transform.up= normal;
+			/*if (hit.distance <=hoovingHeight) {//when is higher than the hooving height, not apply hooving force
 				Vector3 forceToApply = new Vector3(transform.up.x *Physics.gravity.x,
-					transform.up.y *Physics.gravity.y,transform.up.z *Physics.gravity.z)*-2*Time.deltaTime;
+				transform.up.y *Physics.gravity.y,transform.up.z *Physics.gravity.z)*-2*Time.deltaTime;
 				//vehicleRigidBody.AddForce (forceToApply, ForceMode.VelocityChange);
-				vehicleRigidBody.velocity = forceToApply;
-			}
+				vehicleRigidBody.AddRelativeForce (forceToApply, ForceMode.VelocityChange);
+			}*/
 		}
 	}
 		
