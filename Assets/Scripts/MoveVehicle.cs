@@ -67,9 +67,11 @@ public class MoveVehicle : MonoBehaviour {
 			/*float relativeHeight =(hoovingHeight- hit.distance) / hoovingHeight;
 			Vector3 forceToApply = Vector3.up * relativeHeight * hoovingForce;
 			vehicleRigidBody.AddForce (forceToApply, ForceMode.Acceleration);*/
-
+			Vector3 normal = Vector3.Normalize(hit.normal);
+			transform.up.Set(normal.x, normal.y, normal.z);
 			if (hit.distance <=hoovingHeight) {//when is higher than the hooving height, not apply hooving force
-				Vector3 forceToApply = Vector3.up * -Physics.gravity.y*2*Time.deltaTime;
+				Vector3 forceToApply = new Vector3(transform.up.x *Physics.gravity.x,
+					transform.up.y *Physics.gravity.y,transform.up.z *Physics.gravity.z)*-2*Time.deltaTime;
 				//vehicleRigidBody.AddForce (forceToApply, ForceMode.VelocityChange);
 				vehicleRigidBody.velocity = forceToApply;
 			}
