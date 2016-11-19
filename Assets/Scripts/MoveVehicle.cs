@@ -6,13 +6,10 @@ public class MoveVehicle : MonoBehaviour {
 	public float accZ = 6.0f;
 	public float maxSpeedForward = 100.0f;
 	public float turnSpeed = 1.0f;
-    public float fallFactor = 0.5f;
 
 	private bool previousStateGoForward = true;
 	private float speedZ = 0.0f;
 	private float actRotation = 0.0f;
-
-
 
 	// Update is called once per frame
 	void Update () {
@@ -48,12 +45,11 @@ public class MoveVehicle : MonoBehaviour {
         actRotation += turn * turnSpeed;
         gameObject.transform.Rotate(0.0f, actRotation, 0.0f, Space.Self);
 
-
-        changeRotation();
+        changeUpDirection();
 
 	}
 
-    void changeRotation()
+	void changeUpDirection()
     {
         Ray ray = new Ray(transform.position, -transform.up);
         RaycastHit hit;
@@ -65,24 +61,28 @@ public class MoveVehicle : MonoBehaviour {
             transform.up = Vector3.Lerp(transform.up,hit.normal,Time.deltaTime*5.0f);
             */
 
-            /*
+            
             //http://answers.unity3d.com/questions/351899/rotation-lerp.html
-            Vector3 newRotation = Quaternion.LookRotation(hit.normal, -transform.forward).eulerAngles;
-            newRotation.x = 0;
-            newRotation.z = 0;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(newRotation), Time.deltaTime);
-           */
+           
+
+			//Create new object in order to have a new transform to handle rotation as quaternions
+			GameObject tempGameObject = new GameObject();
+			Transform aux = tempGameObject.transform; 
+			//Rotation to go from actual position to hit result normal
+			aux.rotation = Quaternion.LookRotation(hit.normal, -transform.forward);
+			aux.Rotate (Vector3.right, 90f);
+			//Apply an smooth rotation
+			transform.rotation = Quaternion.Slerp (transform.rotation,aux.rotation,Time.deltaTime);
+			Destroy (tempGameObject);
 
             //http://answers.unity3d.com/questions/1192454/bug-transformup-transformup-sets-y-rotation-to-0.html
-            transform.rotation = Quaternion.LookRotation(hit.normal, -transform.forward);
-            transform.Rotate(Vector3.right, 90f);
-
-
+            //transform.rotation = Quaternion.LookRotation(hit.normal, -transform.forward);
+            //transform.Rotate(Vector3.right, 90f);
         }
     }
 
 	void changeAccelerationDirection() {
-		speedZ = -speedZ;
+		speedZ /= 10;
 		accZ *= -1;
 	}
 		
