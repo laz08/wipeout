@@ -8,7 +8,7 @@ public class MoveVehicle : MonoBehaviour {
 	public float turnSpeed = 1.0f;
 
 	private bool previousStateGoForward = true;
-	private float speedZ = 0.0f;
+	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
 
 	// Update is called once per frame
@@ -37,15 +37,15 @@ public class MoveVehicle : MonoBehaviour {
 			}
 		}
 			
-		gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime + (1/2)*accZ*Time.deltaTime*Time.deltaTime,Space.Self);
+		gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime /*+ (1/2)*accZ*Time.deltaTime*Time.deltaTime*/,Space.Self);
 
 		//Tiling
         float turn = Input.GetAxis("Horizontal");
         gameObject.transform.Rotate(0.0f, -actRotation, 0.0f, Space.Self);
         actRotation += turn * turnSpeed;
-        gameObject.transform.Rotate(0.0f, actRotation, 0.0f, Space.Self);
+        //gameObject.transform.Rotate(0.0f, actRotation, 0.0f, Space.Self);
 
-        changeUpDirection();
+        //changeUpDirection();
 
 	}
 
