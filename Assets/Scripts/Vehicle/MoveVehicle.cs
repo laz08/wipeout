@@ -7,9 +7,13 @@ public class MoveVehicle : MonoBehaviour {
 	public float maxSpeedForward = 100.0f;
 	public float turnSpeed = 1.0f;
 
+	public BaseCreateTrackWaypoints mWaypointsFactory;
+
 	private bool previousStateGoForward = true;
 	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
+
+	private bool mIsRotationFree = false;
 
 	// Update is called once per frame
 	void Update () {
@@ -41,11 +45,19 @@ public class MoveVehicle : MonoBehaviour {
 
 		//Tiling
         float turn = Input.GetAxis("Horizontal");
-        gameObject.transform.Rotate(0.0f, -actRotation, 0.0f, Space.Self);
-        actRotation += turn * turnSpeed;
-        //gameObject.transform.Rotate(0.0f, actRotation, 0.0f, Space.Self);
+        
+		if (mIsRotationFree) {
+			
+			gameObject.transform.Rotate (0.0f, -actRotation, 0.0f, Space.Self);
+			actRotation += turn * turnSpeed;
+			gameObject.transform.Rotate (0.0f, actRotation, 0.0f, Space.Self);
+		} else {
 
-        //changeUpDirection();
+			gameObject.transform.LookAt (
+				mWaypointsFactory.getNextWaypoint(
+					gameObject.transform.position));
+		}
+        changeUpDirection();
 
 	}
 

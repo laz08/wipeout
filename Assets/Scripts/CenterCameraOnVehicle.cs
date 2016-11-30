@@ -17,10 +17,10 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 
 		transform.position = 
 			new Vector3 (
-			mUserVehicle.transform.position.x, 
+			mUserVehicle.transform.position.x + 10f, 
 			mUserVehicle.transform.position.y + mOffsetY, 
 			mUserVehicle.transform.position.z + mDefaultZ);
-
+		
 		transform.LookAt(mUserVehicle.transform.position);
 	}
 }
