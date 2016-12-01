@@ -28,7 +28,7 @@ public class VehicleForces : MonoBehaviour {
 			Vector3 appliedHoverForce = hit.normal * proportionalHeight * hoverForce;
 			vehicleRigidBody.AddForce (appliedHoverForce, ForceMode.Acceleration);
 			//Still need to improve this gravity change
-			Physics.gravity = hit.normal*gravity;
+			//Physics.gravity = hit.normal*gravity;
 		}
 
         //Maybe do more than one rayast per position(ex, no tjust at the center, to it to at the vehicle top and bottom)

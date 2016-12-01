@@ -13,7 +13,15 @@ public class MoveVehicle : MonoBehaviour {
 	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
 
-	private bool mIsRotationFree = true;
+	private bool mIsRotationFree = false;
+
+    public float trackRadius = 10.0f;
+    private int actualWayPoint;
+
+    void Start()
+    {
+        actualWayPoint = 0;
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -53,13 +61,44 @@ public class MoveVehicle : MonoBehaviour {
 			gameObject.transform.Rotate (0.0f, actRotation, 0.0f, Space.Self);
 		} else {
 
-			gameObject.transform.LookAt (
+			/*gameObject.transform.LookAt (
 				mWaypointsFactory.getNextWaypoint(
-					gameObject.transform.position));
+					gameObject.transform.position));*/
+
+            //Set the direction as the direction of the previous way point to the actual => The waypoint i+1 should start at waypoint i center ??
+            Vector3 directionToLook = mWaypointsFactory.getWaypoint(actualWayPoint) - mWaypointsFactory.getWaypoint(actualWayPoint -1);
+            Quaternion newRotation = Quaternion.LookRotation(directionToLook);
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime);
+
+  
+                //First translate object to the center of the track
+                gameObject.transform.Translate(-actRotation, 0.0f, 0.0f, Space.Self);
+                //Update distance that vehicle can move
+                //"Rotation", actually a left-right movement
+                Debug.Log(actRotation);
+                actRotation += turn * turnSpeed * Time.deltaTime;
+                if (actRotation > 0){
+                    actRotation = Mathf.Min(actRotation, trackRadius);
+                }
+                else if(actRotation < 0) {
+                    actRotation = Mathf.Max(actRotation, -trackRadius);
+                }
+
+                //Translate it to the position it should be
+                transform.Translate(actRotation, 0.0f, 0.0f, Space.Self);
+
+
 		}
-        changeUpDirection();
+        //changeUpDirection();
 
 	}
+
+
+    void OnTriggerEnter()
+    {
+        Debug.Log("ontriggerneter");
+        actualWayPoint++;
+    }
 
 	void changeUpDirection()
     {
