@@ -13,7 +13,7 @@ public class MoveVehicle : MonoBehaviour {
 	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
 
-	private bool mIsRotationFree = false;
+	private bool mIsRotationFree = true;
 
 	// Update is called once per frame
 	void Update () {
