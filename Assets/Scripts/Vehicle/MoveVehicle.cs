@@ -6,6 +6,7 @@ public class MoveVehicle : MonoBehaviour {
 	public float accZ = 6.0f;
 	public float maxSpeedForward = 100.0f;
 	public float turnSpeed = 1.0f;
+	public float mXAxisApplyValue = 0.11f;
 
 	public BaseCreateTrackWaypoints mWaypointsFactory;
 
@@ -13,54 +14,74 @@ public class MoveVehicle : MonoBehaviour {
 	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
 
-	public bool mIsRotationFree = true;
+	public bool mIsRotationFree = false;
+
+	private float mXAxisOffset = 0.0f;
 
 	// Update is called once per frame
 	void Update () {
-		//Movement
-		if (Input.GetKey (KeyCode.UpArrow)) {
-			if (!previousStateGoForward) {
-				previousStateGoForward = true;
-				changeAccelerationDirection ();
-			}
-			speedZ += accZ * Time.deltaTime;
-			speedZ = Mathf.Min (speedZ,maxSpeedForward);
-		} else if (Input.GetKey (KeyCode.DownArrow)) {
-			if (previousStateGoForward) {
-				previousStateGoForward = false;
-				changeAccelerationDirection ();
-			}
-			speedZ += accZ* Time.deltaTime;
-			speedZ = Mathf.Max (speedZ,-maxSpeedForward);
-		}else { 
-			speedZ -= accZ * Time.deltaTime; //stop movement(go to opposite direction)
-			if (!previousStateGoForward) {
-				speedZ = Mathf.Min (speedZ, 0.0f);
-			} else {
-				speedZ = Mathf.Max (speedZ, 0.0f);
-			}
-		}
-			
-		gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime /*+ (1/2)*accZ*Time.deltaTime*Time.deltaTime*/,Space.Self);
 
-		//Tiling
-        float turn = Input.GetAxis("Horizontal");
-        
 		if (mIsRotationFree) {
-			
-			gameObject.transform.Rotate (0.0f, -actRotation, 0.0f, Space.Self);
-			actRotation += turn * turnSpeed;
-			gameObject.transform.Rotate (0.0f, actRotation, 0.0f, Space.Self);
+
+			applyFreeMovement ();
+			// Corrects up.
+			changeUpDirection();
+
 		} else {
 
-			gameObject.transform.forward =  (
-				mWaypointsFactory.getDir(
-					gameObject.transform.position));
+			followTrackWaypoints ();
 		}
-        changeUpDirection();
-
+			
 	}
 
+
+	/**
+	 * 
+	 * Follows track's waypoints. 
+	 * 
+	 */
+	void followTrackWaypoints(){
+
+
+		Vector3 nextPosition = Vector3.zero;
+
+		// Correct forward.
+		gameObject.transform.forward =  (
+			mWaypointsFactory.getDir(
+				gameObject.transform.position));
+
+
+		if (Input.GetKey(KeyCode.LeftArrow)) {
+
+			mXAxisOffset = mXAxisOffset - mXAxisApplyValue;
+			//transform.localPosition = transform.localPosition + new Vector3 (mXAxisOffset, 0.0f, 0.0f);
+		} 
+
+		if (Input.GetKey(KeyCode.RightArrow)) {
+
+			mXAxisOffset = mXAxisOffset + mXAxisApplyValue;
+			//transform.localPosition = transform.localPosition + new Vector3 (mXAxisOffset, 0.0f, 0.0f);
+		}
+
+
+		if (Input.GetKey (KeyCode.UpArrow)) {
+
+			nextPosition = mWaypointsFactory.getNextWaypoint (transform.position);
+		}
+
+		if(nextPosition != Vector3.zero){
+			transform.position = nextPosition;
+		}
+
+		transform.position = transform.position;// + new Vector3 (mXAxisOffset, 0.0f, 0.0f);
+	}
+
+	/**
+	 * 
+	 * 
+	 *  Changes up direction.
+	 * 
+	 */
 	void changeUpDirection()
     {
         Ray ray = new Ray(transform.position, -transform.up);
@@ -93,9 +114,55 @@ public class MoveVehicle : MonoBehaviour {
         }
     }
 
+	/**
+	 * 
+	 * Changes acceleration Direction.
+	 * 
+	 */
 	void changeAccelerationDirection() {
 		speedZ /= 10;
 		accZ *= -1;
+	}
+
+
+	/**
+	 * 
+	 * Applies free movement.
+	 * 
+	 */
+	void applyFreeMovement(){
+
+		if (Input.GetKey (KeyCode.UpArrow)) {
+			if (!previousStateGoForward) {
+				previousStateGoForward = true;
+				changeAccelerationDirection ();
+			}
+			speedZ += accZ * Time.deltaTime;
+			speedZ = Mathf.Min (speedZ,maxSpeedForward);
+		} else if (Input.GetKey (KeyCode.DownArrow)) {
+			if (previousStateGoForward) {
+				previousStateGoForward = false;
+				changeAccelerationDirection ();
+			}
+			speedZ += accZ* Time.deltaTime;
+			speedZ = Mathf.Max (speedZ,-maxSpeedForward);
+		} else { 
+			speedZ -= accZ * Time.deltaTime; //stop movement(go to opposite direction)
+			if (!previousStateGoForward) {
+				speedZ = Mathf.Min (speedZ, 0.0f);
+			} else {
+				speedZ = Mathf.Max (speedZ, 0.0f);
+			}
+		}
+
+		gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime /*+ (1/2)*accZ*Time.deltaTime*Time.deltaTime*/,Space.Self);
+
+		//Tiling
+		float turn = Input.GetAxis("Horizontal");
+
+		gameObject.transform.Rotate (0.0f, -actRotation, 0.0f, Space.Self);
+		actRotation += turn * turnSpeed;
+		gameObject.transform.Rotate (0.0f, actRotation, 0.0f, Space.Self);
 	}
 		
 }
