@@ -8,7 +8,10 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 
 	public GameObject mWaypointSphere;
 
+	public float mSmoothnessInterpolation = 2.0f; 
+
 	protected Vector3[] mWayPoints;
+	public bool mDrawWaypointsAndLines = true;
 
 	// Use this for initialization
 	public virtual void Start () {
@@ -45,6 +48,32 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 		}
 	}
 
+	public Vector3 getDir(Vector3 currentPosition){
+
+		int closestWaypointIndex = 0;
+		float closestDistance = Mathf.Abs(Vector3.Distance (currentPosition, mWayPoints [0]));
+		float tmpDistance;
+		for (int i = 1; i < mWayPoints.Length; i++) {
+
+			tmpDistance = Mathf.Abs(Vector3.Distance (currentPosition, mWayPoints [i]));
+			if (tmpDistance < closestDistance) {
+
+				closestDistance = tmpDistance;
+				closestWaypointIndex = i;
+			}
+		}
+
+		if(closestWaypointIndex == (mWayPoints.Length - 1)){
+
+			//Its last waypoint, so the next one would be the first in the circuit.
+			return (mWayPoints [0] - mWayPoints[closestWaypointIndex]).normalized;
+		} else {
+
+			//Return next waypoint
+			return (mWayPoints[closestWaypointIndex+1] -  mWayPoints[closestWaypointIndex]).normalized;
+		}
+	}
+
 
 	protected void instantiateWayPoints() {
 
@@ -63,5 +92,16 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+
+	protected void DrawLines(){
+
+		for (int i = 0; i < mWayPoints.Length - 1; i++) {
+		
+
+			Debug.DrawLine(mWayPoints[i], mWayPoints[i+1], Color.red);
+		}
+
 	}
 }

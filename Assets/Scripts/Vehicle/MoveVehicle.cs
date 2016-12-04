@@ -13,7 +13,7 @@ public class MoveVehicle : MonoBehaviour {
 	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
 
-	private bool mIsRotationFree = true;
+	public bool mIsRotationFree = true;
 
 	// Update is called once per frame
 	void Update () {
@@ -53,8 +53,8 @@ public class MoveVehicle : MonoBehaviour {
 			gameObject.transform.Rotate (0.0f, actRotation, 0.0f, Space.Self);
 		} else {
 
-			gameObject.transform.LookAt (
-				mWaypointsFactory.getNextWaypoint(
+			gameObject.transform.forward =  (
+				mWaypointsFactory.getDir(
 					gameObject.transform.position));
 		}
         changeUpDirection();
