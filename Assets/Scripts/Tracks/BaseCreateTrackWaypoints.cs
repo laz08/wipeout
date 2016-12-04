@@ -74,6 +74,11 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 		}
 	}
 
+    public Vector3 getWaypoint(int index)
+    {
+        return mWayPoints[index % (mWayPoints.Length - 1)];
+    }
+
 
 	protected void instantiateWayPoints() {
 
@@ -81,7 +86,7 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 		for (int i = 0; i < mWayPoints.Length; i++) {
 
 			//Instantiate waypoint
-			wayPointObj = (GameObject) Instantiate (mWaypointSphere, mWayPoints[i], transform.rotation);
+			wayPointObj = (GameObject) Instantiate (mWaypointSphere, mWayPoints[i] - new Vector3(0.0f,13.0f,0.0f), transform.rotation);
 
 			//Place waypoint on parent
 			wayPointObj.transform.parent = transform;

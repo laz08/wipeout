@@ -14,9 +14,18 @@ public class MoveVehicle : MonoBehaviour {
 	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
 
+
 	public bool mIsRotationFree = false;
 
 	private float mXAxisOffset = 0.0f;
+
+    public float trackRadius = 10.0f;
+    private int actualWayPoint;
+
+    void Start()
+    {
+        actualWayPoint = 0;
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -30,8 +39,7 @@ public class MoveVehicle : MonoBehaviour {
 		} else {
 
 			followTrackWaypoints ();
-		}
-			
+		}			
 	}
 
 
@@ -69,12 +77,13 @@ public class MoveVehicle : MonoBehaviour {
 			nextPosition = mWaypointsFactory.getNextWaypoint (transform.position);
 		}
 
-		if(nextPosition != Vector3.zero){
+		if (nextPosition != Vector3.zero){
 			transform.position = nextPosition;
 		}
 
 		transform.position = transform.position;// + new Vector3 (mXAxisOffset, 0.0f, 0.0f);
 	}
+
 
 	/**
 	 * 
@@ -164,6 +173,14 @@ public class MoveVehicle : MonoBehaviour {
 		actRotation += turn * turnSpeed;
 		gameObject.transform.Rotate (0.0f, actRotation, 0.0f, Space.Self);
 	}
+
+
+	void OnTriggerEnter()
+	{
+		Debug.Log("ontriggerneter");
+		actualWayPoint++;
+	}
+
 		
 }
 
