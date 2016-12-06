@@ -8,7 +8,10 @@ public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 	void Start () {
 
 		initializeWaypointsArray ();
-		instantiateWayPoints ();
+		if(mInstantiateWaypoints){
+			
+			instantiateWayPoints ();
+		}
 	}
 
 	void Update(){
@@ -85,8 +88,12 @@ public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 				new Vector3 (-6.904592f, -14.85552f, 1.75062f)
 			};
 
-
-		//mWayPoints = BezierInterpolator.MakeSmoothCurve(hardcodedWaypoints, mSmoothnessInterpolation);
-		mWayPoints = hardcodedWaypoints;
+		if (mApplyInterpolation) {
+			
+			mWayPoints = BezierInterpolator.MakeSmoothCurve (hardcodedWaypoints, mSmoothnessInterpolation);
+		} else {
+			
+			mWayPoints = hardcodedWaypoints;
+		}
 	}
 }

@@ -3,28 +3,30 @@ using System.Collections;
 
 public class MoveVehicle : MonoBehaviour {
 
+	//Config.
 	public float accZ = 6.0f;
+	public float speedZ = 0.0f;
 	public float maxSpeedForward = 100.0f;
-	public float turnSpeed = 1.0f;
-	public float mXAxisApplyValue = 0.1f;
+	public float mXAxisApplyValue = 0.1f; //This configs how "maneagable" is the vehicle. 
 
 	public BaseCreateTrackWaypoints mWaypointsFactory;
 
+	//For debugging purposes.
+	public bool mIsRotationFree = false; 
+
+
+	//Free movement
+	private float turnSpeed = 1.0f;
 	private bool previousStateGoForward = true;
-	public float speedZ = 0.0f;
 	private float actRotation = 0.0f;
 
-
-	public bool mIsRotationFree = false;
-
-	private float mXAxisOffset = 0.0f;
-
-    public float trackRadius = 10.0f;
-    private int actualWayPoint;
+	//Movement in X Axis.
+	public float mXAxisOffset = 0.0f;
+	public float MaxXAxisOffset = 19.0f;
 
     void Start()
     {
-        actualWayPoint = 0;
+       
     }
 
 	// Update is called once per frame
@@ -51,63 +53,83 @@ public class MoveVehicle : MonoBehaviour {
 	void followTrackWaypoints(){
 
 		// Correct forward.
+
 		gameObject.transform.forward =  (
 			mWaypointsFactory.getDir(
 				gameObject.transform.position));
 
-		moveForward();
-
+		float forwardValue = moveForward();
+		float xAxisValue = 0;
 		if (Input.GetKey(KeyCode.LeftArrow)) {
 
-			applyOffsetOnXAxis (true);
+			xAxisValue = applyOffsetOnXAxis (true);
 		}
 
 		if (Input.GetKey(KeyCode.RightArrow)) {
 
-			applyOffsetOnXAxis (false);
+			xAxisValue = applyOffsetOnXAxis (false);
 		}
+
+		gameObject.transform.position = gameObject.transform.position
+			+ gameObject.transform.TransformDirection (new Vector3 (xAxisValue, 0.0f, forwardValue));
 	}
 
 	/**
 	 * Applies offset on x Axis
 	 */
-	void applyOffsetOnXAxis(bool isLeft){
+	float applyOffsetOnXAxis(bool isLeft){
 		
 		float valueToApply;
 		if (isLeft) {
-			
+		
 			valueToApply = -mXAxisApplyValue;
+			mXAxisOffset += valueToApply;
+			mXAxisOffset =  Mathf.Max (mXAxisOffset, -MaxXAxisOffset);
+			if (mXAxisOffset >= -MaxXAxisOffset) {
+		
+				return valueToApply;
+			}
 		} else {
-			
+		
 			valueToApply = mXAxisApplyValue;
+			mXAxisOffset += valueToApply;
+			mXAxisOffset =  Mathf.Min (mXAxisOffset, MaxXAxisOffset);
+			if (mXAxisOffset < MaxXAxisOffset) {
+
+				return valueToApply;
+				//gameObject.transform.position = gameObject.transform.position
+				//	+ gameObject.transform.TransformDirection (new Vector3 (valueToApply, 0.0f, 0.0f));
+			}
 		}
-			
-		mXAxisOffset += valueToApply;
-		gameObject.transform.position = gameObject.transform.position 
-			+ gameObject.transform.TransformDirection (new Vector3 (valueToApply, 0.0f, 0.0f));
+		return 0;
 	}
 
 	/**
 	 * Moves vehicle forward.
 	 */
-	void moveForward(){
-
-		//TODO Laura: Keeping this method so ugly so we can apply constants, instead of moving from point to point.
-		Vector3 nextPosition = Vector3.zero;
+	float moveForward(){
+		
 		if (Input.GetKey (KeyCode.UpArrow)) {
 
-			nextPosition = mWaypointsFactory.getNextWaypoint (transform.position);
-		}
+			//nextPosition = mWaypointsFactory.getNextWaypoint (transform.position);
+			//transform.position = new Vector3(nextPosition.x, transform.position.y, nextPosition.z);				
 
-		if (nextPosition != Vector3.zero){
+			augmentSpeed ();
+			return  speedZ * Time.deltaTime;
+			//transform.position = transform.position 
+			//	+ gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime,  /*+ (1/2)*accZ*Time.deltaTime*Time.deltaTime*/
+			//	, Space.Self);
 
-			transform.position = new Vector3(nextPosition.x, transform.position.y, nextPosition.z);
 
+			//TODO: No need to recover offset for now.
+			/*
 			//Recovering offset.
 			//Very important...
 			transform.position = transform.position 
 				+ gameObject.transform.TransformDirection (new Vector3 (mXAxisOffset, 0.0f, 0.0f));
+			*/
 		}
+		return 0;
 	}
 
 
@@ -149,16 +171,12 @@ public class MoveVehicle : MonoBehaviour {
         }
     }
 
-	/**
-	 *
-	 * Changes acceleration Direction.
-	 *
-	 */
-	void changeAccelerationDirection() {
-		speedZ /= 10;
-		accZ *= -1;
-	}
 
+	private void augmentSpeed(){
+	
+		speedZ += accZ * Time.deltaTime;
+		speedZ = Mathf.Min (speedZ,maxSpeedForward);
+	}
 
 	/**
 	 *
@@ -172,8 +190,7 @@ public class MoveVehicle : MonoBehaviour {
 				previousStateGoForward = true;
 				changeAccelerationDirection ();
 			}
-			speedZ += accZ * Time.deltaTime;
-			speedZ = Mathf.Min (speedZ,maxSpeedForward);
+			augmentSpeed ();
 		} else if (Input.GetKey (KeyCode.DownArrow)) {
 			if (previousStateGoForward) {
 				previousStateGoForward = false;
@@ -201,12 +218,15 @@ public class MoveVehicle : MonoBehaviour {
 	}
 
 
-	/*
-	void OnTriggerEnter()
-	{
-		Debug.Log("ontriggerneter");
-		actualWayPoint++;
+	/**
+	 *
+	 * Changes acceleration Direction.
+	 *
+	 */
+	void changeAccelerationDirection() {
+		speedZ /= 10;
+		accZ *= -1;
 	}
-*/
+
 
 }

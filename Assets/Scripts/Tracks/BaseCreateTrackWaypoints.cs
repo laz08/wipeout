@@ -12,6 +12,8 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 
 	protected Vector3[] mWayPoints;
 	public bool mDrawWaypointsAndLines = true;
+	public bool mApplyInterpolation = false;
+	public bool mInstantiateWaypoints = true;
 
 	// Use this for initialization
 	public virtual void Start () {
@@ -127,10 +129,10 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 		for (int i = 0; i < mWayPoints.Length; i++) {
 
 			//Instantiate waypoint
-			wayPointObj = (GameObject) Instantiate (mWaypointSphere, mWayPoints[i] - new Vector3(0.0f,13.0f,0.0f), transform.rotation);
+			wayPointObj = (GameObject) Instantiate (mWaypointSphere, mWayPoints[i], transform.rotation);
 
 			//Place waypoint on parent
-			wayPointObj.transform.parent = transform;
+			//wayPointObj.transform.parent = transform;
 		}
 	}
 		
