@@ -6,7 +6,7 @@ public class VehicleForces : MonoBehaviour {
 	public float hoverForce = 65f;
 	public float hoverHeight = 3.5f;
 
-	float gravity = -9.8f;
+	//float gravity = -9.8f;
 
 	Rigidbody vehicleRigidBody;
     BoxCollider boxC;
