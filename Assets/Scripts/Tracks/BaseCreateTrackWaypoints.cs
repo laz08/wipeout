@@ -22,6 +22,41 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 	}
 
 
+	// ------------------------------------------------
+	// -----------      NEW       ---------------------
+	// ------------------------------------------------
+	public Vector3 getWaypointPosition(int currentWaypoint){
+
+		return mWayPoints [currentWaypoint];
+	}
+
+	public int getNextWaypoint(int currentWaypoint){
+
+		if (currentWaypoint == mWayPoints.Length - 1) {
+
+			return 0;
+		} else {
+
+			return currentWaypoint+1;
+		}
+	}
+
+	public Vector3 getDir(int currentWaypoint){
+
+		if (currentWaypoint == mWayPoints.Length - 1) {
+
+			return (mWayPoints [0] - mWayPoints [currentWaypoint]).normalized;
+		} else {
+
+			//Return next waypoint dir
+			return (mWayPoints[currentWaypoint+1] -  mWayPoints[currentWaypoint]).normalized;
+		}
+	}
+
+
+	// ------------------------------------------------
+	// -----------      OLD       ---------------------
+	// ------------------------------------------------
 	public Vector3 getNextWaypoint(Vector3 currentPosition){
 
 		int closestWaypointIndex = 0;
@@ -74,12 +109,18 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 		}
 	}
 
-    public Vector3 getWaypoint(int index)
-    {
-        return mWayPoints[index % (mWayPoints.Length - 1)];
-    }
+	public Vector3 getWaypoint(int index)
+	{
+		return mWayPoints[index % (mWayPoints.Length - 1)];
+	}
 
 
+
+
+	// ------------------------------------------------
+	// -----------    ON START    ---------------------
+	// -----------     DEBUG      ---------------------
+	// ------------------------------------------------
 	protected void instantiateWayPoints() {
 
 		GameObject wayPointObj;
@@ -92,13 +133,7 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 			wayPointObj.transform.parent = transform;
 		}
 	}
-
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
+		
 
 	protected void DrawLines(){
 
@@ -107,6 +142,20 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 
 			Debug.DrawLine(mWayPoints[i], mWayPoints[i+1], Color.red);
 		}
+		Debug.DrawLine(mWayPoints[mWayPoints.Length-1], mWayPoints[0], Color.red);
+	}
 
+	void OnDrawGizmos(){
+
+		Gizmos.color = Color.blue;
+		if (mWayPoints != null) {
+			Gizmos.DrawSphere (mWayPoints [0], 3);
+
+			Gizmos.color = Color.yellow;
+			for (int i = 1; i < mWayPoints.Length; i++) {
+		
+				Gizmos.DrawSphere (mWayPoints [i], 1);
+			}
+		}
 	}
 }

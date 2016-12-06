@@ -23,6 +23,7 @@ public class DebugPoints : MonoBehaviour {
         }
 
         sr = new StreamWriter(fileName + fileNameEnd, true);
+		sr.WriteLine ("Vector3[] hardcodedWaypoints = new [] {");
 	}
 	
 	// Update is called once per frame
@@ -33,11 +34,16 @@ public class DebugPoints : MonoBehaviour {
 
             Debug.Log(transform.position);
 
-            sr.WriteLine(transform.position.x + " " + transform.position.y + " " + transform.position.z);
+            sr.WriteLine(
+				"new Vector3 (" + transform.position.x + "f, " 
+				+ transform.position.y + "f, " 
+				+ transform.position.z + "f),"
+			);
 
         }
-        if (Input.GetKey("q"))
+		if (Input.GetKey(KeyCode.Q))
         {
+			sr.WriteLine ("};");
             sr.Close();
         }
 	}

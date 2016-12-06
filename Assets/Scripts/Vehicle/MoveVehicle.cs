@@ -101,11 +101,11 @@ public class MoveVehicle : MonoBehaviour {
 
 		if (nextPosition != Vector3.zero){
 
-			transform.position = nextPosition;
+			transform.position = new Vector3(nextPosition.x, transform.position.y, nextPosition.z);
 
 			//Recovering offset.
 			//Very important...
-			gameObject.transform.position = gameObject.transform.position 
+			transform.position = transform.position 
 				+ gameObject.transform.TransformDirection (new Vector3 (mXAxisOffset, 0.0f, 0.0f));
 		}
 	}
@@ -201,11 +201,12 @@ public class MoveVehicle : MonoBehaviour {
 	}
 
 
+	/*
 	void OnTriggerEnter()
 	{
 		Debug.Log("ontriggerneter");
 		actualWayPoint++;
 	}
-
+*/
 
 }
