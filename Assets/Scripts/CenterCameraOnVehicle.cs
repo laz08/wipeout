@@ -13,7 +13,7 @@ public class CenterCameraOnVehicle : MonoBehaviour {
     private float actualTransl;
 	// Use this for initialization
 	void Start () {
-        actualTransl = 0.0f;
+        //actualTransl = 0.0f;
 
 	}
 	

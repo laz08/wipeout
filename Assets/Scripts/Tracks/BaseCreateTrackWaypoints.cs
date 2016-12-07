@@ -132,7 +132,7 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 			wayPointObj = (GameObject) Instantiate (mWaypointSphere, mWayPoints[i], transform.rotation);
 
 			//Place waypoint on parent
-			//wayPointObj.transform.parent = transform;
+			wayPointObj.transform.parent = transform;
 		}
 	}
 		
@@ -150,7 +150,7 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 	void OnDrawGizmos(){
 
 		Gizmos.color = Color.blue;
-		if (mWayPoints != null) {
+		if (mWayPoints != null && mWayPoints.Length > 0) {
 			Gizmos.DrawSphere (mWayPoints [0], 3);
 
 			Gizmos.color = Color.yellow;

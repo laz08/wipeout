@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 
@@ -90,7 +92,9 @@ public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 
 		if (mApplyInterpolation) {
 			
-			mWayPoints = BezierInterpolator.MakeSmoothCurve (hardcodedWaypoints, mSmoothnessInterpolation);
+			//mWayPoints = BezierInterpolator.MakeSmoothCurve (hardcodedWaypoints, mSmoothnessInterpolation);
+			mWayPoints = CatmullRomSpline.GetInterpolatedPoints(hardcodedWaypoints);
+
 		} else {
 			
 			mWayPoints = hardcodedWaypoints;

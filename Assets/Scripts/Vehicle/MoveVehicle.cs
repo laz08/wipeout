@@ -24,9 +24,12 @@ public class MoveVehicle : MonoBehaviour {
 	public float mXAxisOffset = 0.0f;
 	public float MaxXAxisOffset = 19.0f;
 
+	public int currentWayPoint;
+
     void Start()
     {
        
+		currentWayPoint = 0;
     }
 
 	// Update is called once per frame
@@ -111,11 +114,13 @@ public class MoveVehicle : MonoBehaviour {
 		
 		if (Input.GetKey (KeyCode.UpArrow)) {
 
+			augmentSpeed ();
+			return  speedZ * Time.deltaTime;
+
 			//nextPosition = mWaypointsFactory.getNextWaypoint (transform.position);
 			//transform.position = new Vector3(nextPosition.x, transform.position.y, nextPosition.z);				
 
-			augmentSpeed ();
-			return  speedZ * Time.deltaTime;
+		
 			//transform.position = transform.position 
 			//	+ gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime,  /*+ (1/2)*accZ*Time.deltaTime*Time.deltaTime*/
 			//	, Space.Self);
@@ -227,6 +232,5 @@ public class MoveVehicle : MonoBehaviour {
 		speedZ /= 10;
 		accZ *= -1;
 	}
-
 
 }
