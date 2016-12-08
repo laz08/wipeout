@@ -4,7 +4,7 @@ using System.Collections;
 public class ProjectileItem : MonoBehaviour {
 
 	public ParticleSystem explosion;
-	public float speed = 60.0f;
+	public float speed = 120.0f;
 
 	// Update is called once per frame
 	void Update () {
