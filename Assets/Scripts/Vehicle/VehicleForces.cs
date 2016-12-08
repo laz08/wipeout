@@ -28,7 +28,8 @@ public class VehicleForces : MonoBehaviour {
 			Vector3 appliedHoverForce = hit.normal * proportionalHeight * hoverForce;
 			vehicleRigidBody.AddForce (appliedHoverForce, ForceMode.Acceleration);
 			//Still need to improve this gravity change
-			Physics.gravity = hit.normal*gravity;
+			vehicleRigidBody.AddForce(-gravity*Physics.gravity); //Delete the previous physics but deeltes also hooving forces!
+			Physics.gravity = hit.normal*gravity; //THIS CHANGES THE PYSHICS OF ALL THE SCENE!!!!
 		}
 
 		/*
