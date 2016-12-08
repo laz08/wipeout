@@ -30,7 +30,7 @@ public class MoveVehicle : MonoBehaviour {
     {
        
 		currentWayPoint = 0;
-		transform.position = mWaypointsFactory.getWaypoint (0);
+		if (!mIsRotationFree) transform.position = mWaypointsFactory.getWaypoint (0);
     }
 
 	// Update is called once per frame
@@ -168,7 +168,8 @@ public class MoveVehicle : MonoBehaviour {
 			aux.rotation = Quaternion.LookRotation(hit.normal, -transform.forward);
 			aux.Rotate (Vector3.right, 90f);
 			//Apply an smooth rotation
-			transform.rotation = Quaternion.Slerp (transform.rotation,aux.rotation,Time.deltaTime);
+			transform.rotation = Quaternion.Slerp (transform.rotation,aux.rotation,Time.deltaTime*20);
+			//transform.rotation = aux.rotation;
 			Destroy (tempGameObject);
 
             //http://answers.unity3d.com/questions/1192454/bug-transformup-transformup-sets-y-rotation-to-0.html
@@ -216,11 +217,14 @@ public class MoveVehicle : MonoBehaviour {
 		gameObject.transform.Translate(0.0f, 0.0f, speedZ*Time.deltaTime /*+ (1/2)*accZ*Time.deltaTime*Time.deltaTime*/,Space.Self);
 
 		//Tiling
+		float turnSpeed = 50.0f;
 		float turn = Input.GetAxis("Horizontal");
-
+		/*
 		gameObject.transform.Rotate (0.0f, -actRotation, 0.0f, Space.Self);
 		actRotation += turn * turnSpeed;
 		gameObject.transform.Rotate (0.0f, actRotation, 0.0f, Space.Self);
+		*/
+		gameObject.transform.Translate (turnSpeed*turn*Time.deltaTime,0.0f,0.0f);
 	}
 
 

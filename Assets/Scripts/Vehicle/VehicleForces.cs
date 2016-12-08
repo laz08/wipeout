@@ -6,7 +6,7 @@ public class VehicleForces : MonoBehaviour {
 	public float hoverForce = 65f;
 	public float hoverHeight = 3.5f;
 
-	//float gravity = -9.8f;
+	float gravity = -9.8f;
 
 	Rigidbody vehicleRigidBody;
     BoxCollider boxC;
@@ -28,9 +28,10 @@ public class VehicleForces : MonoBehaviour {
 			Vector3 appliedHoverForce = hit.normal * proportionalHeight * hoverForce;
 			vehicleRigidBody.AddForce (appliedHoverForce, ForceMode.Acceleration);
 			//Still need to improve this gravity change
-			//Physics.gravity = hit.normal*gravity;
+			Physics.gravity = hit.normal*gravity;
 		}
 
+		/*
         //Maybe do more than one rayast per position(ex, no tjust at the center, to it to at the vehicle top and bottom)
         Ray rayLeft = new Ray(transform.position - new Vector3(boxC.size.x/2.0f, 0.0f,0.0f), -transform.up);
         Ray rayRight = new Ray(transform.position + new Vector3( boxC.size.x/2.0f, 0.0f, 0.0f), -transform.up);
@@ -40,6 +41,7 @@ public class VehicleForces : MonoBehaviour {
             //vehicleRigidBody.AddForce(-5*dirforce);
             transform.Translate(dirForce, Space.World);
         }
+		*/
 	}
 
 }
