@@ -30,6 +30,7 @@ public class MoveVehicle : MonoBehaviour {
     {
        
 		currentWayPoint = 0;
+		transform.position = mWaypointsFactory.getWaypoint (0);
     }
 
 	// Update is called once per frame
