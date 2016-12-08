@@ -7,7 +7,7 @@ public class VehicleForces : MonoBehaviour {
 	public float hoverHeight = 3.5f;
 
 	float gravity = -9.8f;
-
+	Vector3 gravityDir = new Vector3(0.0f,1.0f,0.0f);
 	Rigidbody vehicleRigidBody;
     BoxCollider boxC;
 
@@ -18,6 +18,8 @@ public class VehicleForces : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		//Add gravity force
+		vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.VelocityChange);
 
 		Ray ray = new Ray (transform.position, -transform.up);
 		RaycastHit hit;
@@ -27,9 +29,11 @@ public class VehicleForces : MonoBehaviour {
 			float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
 			Vector3 appliedHoverForce = hit.normal * proportionalHeight * hoverForce;
 			vehicleRigidBody.AddForce (appliedHoverForce, ForceMode.Acceleration);
+			//Change gravity direction
+			gravityDir = hit.normal;
 			//Still need to improve this gravity change
-			vehicleRigidBody.AddForce(-gravity*Physics.gravity); //Delete the previous physics but deeltes also hooving forces!
-			Physics.gravity = hit.normal*gravity; //THIS CHANGES THE PYSHICS OF ALL THE SCENE!!!!
+			//Physics.gravity = hit.normal*gravity; //THIS CHANGES THE PYSHICS OF ALL THE SCENE!!!!
+			//vehicleRigidBody.AddForce(hit.normal*gravity);
 		}
 
 		/*
