@@ -62,11 +62,12 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 	public Vector3 getNextWaypoint(Vector3 currentPosition){
 
 		int closestWaypointIndex = 0;
-		float closestDistance = Mathf.Abs(Vector3.Distance (currentPosition, mWayPoints [0]));
+		//float closestDistance = Mathf.Abs(Vector3.Distance (currentPosition, mWayPoints [0]));
+		float closestDistance = Vector3.Distance (currentPosition, mWayPoints [0]);
 		float tmpDistance;
 		for (int i = 1; i < mWayPoints.Length; i++) {
 
-			tmpDistance = Mathf.Abs(Vector3.Distance (currentPosition, mWayPoints [i]));
+			tmpDistance = Vector3.Distance (currentPosition, mWayPoints [i]);
 			if (tmpDistance < closestDistance) {
 
 				closestDistance = tmpDistance;
@@ -88,11 +89,11 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 	public Vector3 getDir(Vector3 currentPosition){
 
 		int closestWaypointIndex = 0;
-		float closestDistance = Mathf.Abs(Vector3.Distance (currentPosition, mWayPoints [0]));
+		float closestDistance = Vector3.Distance (currentPosition, mWayPoints [0]);
 		float tmpDistance;
 		for (int i = 1; i < mWayPoints.Length; i++) {
 
-			tmpDistance = Mathf.Abs(Vector3.Distance (currentPosition, mWayPoints [i]));
+			tmpDistance = Vector3.Distance (currentPosition, mWayPoints [i]);
 			if (tmpDistance < closestDistance) {
 
 				closestDistance = tmpDistance;
@@ -100,14 +101,15 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 			}
 		}
 
-		if(closestWaypointIndex == (mWayPoints.Length - 1)){
+		//if(closestWaypointIndex == (mWayPoints.Length - 1)){
+		if(closestWaypointIndex == 0){
 
 			//Its last waypoint, so the next one would be the first in the circuit.
-			return (mWayPoints [0] - mWayPoints[closestWaypointIndex]).normalized;
+			return (mWayPoints [0] - mWayPoints[mWayPoints.Length-1]).normalized;
 		} else {
 
 			//Return next waypoint
-			return (mWayPoints[closestWaypointIndex+1] -  mWayPoints[closestWaypointIndex]).normalized;
+			return (mWayPoints[closestWaypointIndex] -  mWayPoints[closestWaypointIndex-1]).normalized;
 		}
 	}
 
