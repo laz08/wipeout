@@ -9,14 +9,20 @@ public class ItemVehicle : MonoBehaviour {
 
     Items actualItem;
 
+	public GameObject projectile;
+
 	public float turboTime = 1.0f;
 	public float turboSpeed = 150.0f;
 	private float turboCountDown = 0.0f;
 	private bool turboActivate = false;
 
+	Vector3 boxSelf,boxProjectile;
+
 	// Use this for initialization
 	void Start () {
         actualItem = Items.NONE;
+		boxSelf = GetComponent<BoxCollider>().size;
+		boxProjectile = projectile.GetComponent<BoxCollider> ().size;
 	}
 	
 	// Update is called once per frame
@@ -24,13 +30,18 @@ public class ItemVehicle : MonoBehaviour {
 
 		//Check if user activates actual item
 	    if (actualItem != Items.NONE && (Input.GetKey ("e")) ) {
-			itemActivatedEffect();
 			if (actualItem == Items.TURBO) {
 				turboActivate = true;
 				turboCountDown = turboTime;
 				actualItem = Items.NONE;
 			}
-			itemNotActivatedEffect();//Set to NONE
+			if (actualItem == Items.PROJECTILE) {
+				Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z/2 + boxProjectile.z);
+				offset = transform.TransformVector (offset);
+				Instantiate(projectile,transform.position + offset,transform.rotation);
+				actualItem = Items.NONE;
+			}
+			itemActivatedEffect();//Set to NONE
         }
 
 		//Check if the vehicle is in a velocity ramp
@@ -58,7 +69,8 @@ public class ItemVehicle : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (actualItem == Items.NONE && collision.gameObject.tag == "PowerUpItem") {
-			int item = Random.Range (0, 2);
+			//int item = Random.Range (0, 2);
+			int item  = 1;
 			Debug.Log ("random number: " + item);
 			switch (item) {
 			case 0:
@@ -70,28 +82,11 @@ public class ItemVehicle : MonoBehaviour {
 			default:
 				break;
 			}
-			itemNotActivatedEffect();
+			itemActivatedEffect();
         }
     }
 
 	//GUI effects
-
-	//show actual item (not activated) TODO
-	void itemNotActivatedEffect() {
-		switch (actualItem) {
-		case Items.NONE:
-
-			break;
-		case Items.TURBO:
-
-			break;
-		case Items.PROJECTILE:
-
-			break;
-		default:
-			break;
-		}
-	}
 
 	//show actual item (actived) TODO
 	void itemActivatedEffect() {
