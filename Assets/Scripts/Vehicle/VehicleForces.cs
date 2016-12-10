@@ -3,10 +3,10 @@ using System.Collections;
 
 public class VehicleForces : MonoBehaviour {
 
-	public float hoverForce = 65f;
-	public float hoverHeight = 3.5f;
+	private float hoverForce = 65f;
+	private float hoverHeight = 3.5f;
 
-	public BaseCreateTrackWaypoints mWaypointsFactory;
+	public bool addForceAsVelocity = true; //True for first track. False for torus.
 
 	float gravity = -9.8f;
 	Vector3 gravityDir = new Vector3(0.0f,1.0f,0.0f);
@@ -21,11 +21,15 @@ public class VehicleForces : MonoBehaviour {
 
 	void FixedUpdate() {
 		//Add gravity force
-		if(mWaypointsFactory as CreateFirstTrackWaypoints)
+
+		if (addForceAsVelocity) {
+			
 			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.VelocityChange);
-		else
-			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.Acceleration);
+		} else {
 		
+			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.Acceleration);
+		}
+
 		Ray ray = new Ray (transform.position, -transform.up);
 		RaycastHit hit;
 

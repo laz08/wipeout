@@ -5,21 +5,19 @@ public class MoveVehicle : MonoBehaviour {
 
 	//Config.
 	public float accZ = 6.0f;
-	public float speedZ = 0.0f;
 	public float maxSpeedForward = 100.0f;
-	public float mXAxisApplyValue = 0.1f; //This configs how "maneagable" the vehicle is. 
 
 	public PlayerLapsController lapsController;
 	public BaseCreateTrackWaypoints mWaypointsFactory;
 
 	//Movement in X Axis.
-	public float xAxisSpeed = 500.0f;
+	public float xAxisSpeed = 15.0f;
 	public bool isAutomaticMove = false;
 	public bool isPlayerVehicle = true;
 
+	private float speedZ = 0.0f;
 	private int lapsDone = 0;
-
-	public int currentWayPoint;
+	private int currentWayPoint;
 
     void Start()
     {
@@ -41,6 +39,12 @@ public class MoveVehicle : MonoBehaviour {
 			
 		checkHasLapBeenDone ();
 		changeUpDirection();
+	}
+
+
+	public int getLapsDone(){
+
+		return lapsDone;
 	}
 
 	/*
