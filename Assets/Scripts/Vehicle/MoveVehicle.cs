@@ -22,7 +22,7 @@ public class MoveVehicle : MonoBehaviour {
 
 	//Movement in X Axis.
 	public float mXAxisOffset = 0.0f;
-	public float MaxXAxisOffset = 19.0f;
+	public float MaxXAxisOffset = 19000.0f;
 
 	public int currentWayPoint;
 
