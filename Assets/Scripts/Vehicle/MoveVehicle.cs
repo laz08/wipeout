@@ -23,6 +23,7 @@ public class MoveVehicle : MonoBehaviour {
 	//Movement in X Axis.
 	public float mXAxisOffset = 0.0f;
 	public float MaxXAxisOffset = 19.0f;
+	public float xAxisSpeed = 500.0f;
 
 	public int currentWayPoint;
 
@@ -40,12 +41,13 @@ public class MoveVehicle : MonoBehaviour {
 
 			applyFreeMovement ();
 			// Corrects up.
-			changeUpDirection();
 
 		} else {
 
 			followTrackWaypoints ();
 		}
+		changeUpDirection();
+
 	}
 
 
@@ -58,13 +60,37 @@ public class MoveVehicle : MonoBehaviour {
 
 		// Correct forward.
 
-		gameObject.transform.forward =  (
+
+		//http://answers.unity3d.com/questions/351899/rotation-lerp.html
+
+		Vector3 newForward = (
+		                         mWaypointsFactory.getDir (
+			                         gameObject.transform.position));
+
+		//Create new object in order to have a new transform to handle rotation as quaternions
+		/*GameObject tempGameObject = new GameObject();
+		Transform aux = tempGameObject.transform;
+		//Rotation to go from actual position to forward result 
+		aux.rotation = Quaternion.LookRotation(newForward, -transform.right);
+		aux.Rotate (Vector3.up, 90f);
+		//Apply an smooth rotation
+		transform.rotation = Quaternion.Slerp (transform.rotation,aux.rotation,Time.deltaTime);
+		//transform.rotation = aux.rotation;
+		Destroy (tempGameObject);*/
+		//transform.rotation = Quaternion.LookRotation (newForward);
+
+		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime);
+			
+		//http://answers.unity3d.com/questions/1192454/bug-transformup-transformup-sets-y-rotation-to-0.html
+
+
+	/*	gameObject.transform.forward =  (
 			mWaypointsFactory.getDir(
 				gameObject.transform.position));
-
+*/
 		float forwardValue = moveForward();
 		float xAxisValue = 0;
-		if (Input.GetKey(KeyCode.LeftArrow)) {
+		/*if (Input.GetKey(KeyCode.LeftArrow)) {
 
 			xAxisValue = applyOffsetOnXAxis (true);
 		}
@@ -72,7 +98,9 @@ public class MoveVehicle : MonoBehaviour {
 		if (Input.GetKey(KeyCode.RightArrow)) {
 
 			xAxisValue = applyOffsetOnXAxis (false);
-		}
+		}*/
+
+		xAxisValue = Input.GetAxis ("Horizontal") * xAxisSpeed * Time.deltaTime;
 
 		gameObject.transform.position = gameObject.transform.position
 			+ gameObject.transform.TransformDirection (new Vector3 (xAxisValue, 0.0f, forwardValue));
