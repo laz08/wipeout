@@ -10,14 +10,14 @@ public class CreateSecondTRackWayPoints : BaseCreateTrackWaypoints {
 	void Start () {
 
 		initializeWaypointsArray ();
-		if(mInstantiateWaypoints){
+		if(shouldWaypointsBeInstantiated){
 
 			instantiateWayPoints ();
 		}
 	}
 
 	void Update(){
-		if(mDrawWaypointsAndLines){
+		if(shouldWaypointsBeInstantiated){
 
 			DrawLines ();
 		}
@@ -44,7 +44,7 @@ public class CreateSecondTRackWayPoints : BaseCreateTrackWaypoints {
 			hardcodedWaypoints [i] = center + new Vector3 (0,Mathf.Sin(alpha)*radius,Mathf.Cos(alpha)*radius);
 		}
 
-		if (mApplyInterpolation) {
+		if (applyInterpolation) {
 
 			//mWayPoints = BezierInterpolator.MakeSmoothCurve (hardcodedWaypoints, mSmoothnessInterpolation);
 			mWayPoints = CatmullRomSpline.GetInterpolatedPoints(hardcodedWaypoints);

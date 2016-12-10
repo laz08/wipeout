@@ -10,14 +10,14 @@ public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 	void Start () {
 
 		initializeWaypointsArray ();
-		if(mInstantiateWaypoints){
+		if(shouldWaypointsBeInstantiated){
 			
 			instantiateWayPoints ();
 		}
 	}
 
 	void Update(){
-		if(mDrawWaypointsAndLines){
+		if(drawWaypointsAndLines){
 
 			DrawLines ();
 		}
@@ -90,7 +90,7 @@ public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 				new Vector3 (-6.904592f, -14.85552f, 1.75062f)
 			};
 
-		if (mApplyInterpolation) {
+		if (applyInterpolation) {
 			
 			//mWayPoints = BezierInterpolator.MakeSmoothCurve (hardcodedWaypoints, mSmoothnessInterpolation);
 			mWayPoints = CatmullRomSpline.GetInterpolatedPoints(hardcodedWaypoints);

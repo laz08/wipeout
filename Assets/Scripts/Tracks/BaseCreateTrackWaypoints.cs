@@ -8,12 +8,13 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 
 	public GameObject mWaypointSphere;
 
-	public float mSmoothnessInterpolation = 2.0f; 
+	public float smoothnessInterpolation = 2.0f; 
 
 	protected Vector3[] mWayPoints;
-	public bool mDrawWaypointsAndLines = true;
-	public bool mApplyInterpolation = false;
-	public bool mInstantiateWaypoints = true;
+
+	public bool drawWaypointsAndLines = true;
+	public bool applyInterpolation = false;
+	public bool shouldWaypointsBeInstantiated= false;
 
 	// Use this for initialization
 	public virtual void Start () {

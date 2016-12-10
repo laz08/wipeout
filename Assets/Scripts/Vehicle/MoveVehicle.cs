@@ -23,6 +23,7 @@ public class MoveVehicle : MonoBehaviour {
 
 	//Movement in X Axis.
 	public float xAxisSpeed = 500.0f;
+	public bool automaticMove = false;
 
 	private int lapsDone = 0;
 
