@@ -119,6 +119,22 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 	}
 
 
+	public int getCurrentWaypointIndex(Vector3 currentPosition){
+
+		int closestWaypointIndex = 0;
+		float closestDistance = Vector3.Distance (currentPosition, mWayPoints [0]);
+		float tmpDistance;
+		for (int i = 1; i < mWayPoints.Length; i++) {
+
+			tmpDistance = Vector3.Distance (currentPosition, mWayPoints [i]);
+			if (tmpDistance < closestDistance) {
+
+				closestDistance = tmpDistance;
+				closestWaypointIndex = i;
+			}
+		}
+		return closestWaypointIndex;
+	}
 
 
 	// ------------------------------------------------

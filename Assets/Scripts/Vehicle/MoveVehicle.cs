@@ -24,6 +24,7 @@ public class MoveVehicle : MonoBehaviour {
 	//Movement in X Axis.
 	public float xAxisSpeed = 500.0f;
 
+	private int lapsDone = 0;
 
 	public int currentWayPoint;
 
@@ -46,8 +47,8 @@ public class MoveVehicle : MonoBehaviour {
 
 			followTrackWaypoints ();
 		}
-		changeUpDirection();
 
+		changeUpDirection();
 	}
 
 
@@ -66,6 +67,8 @@ public class MoveVehicle : MonoBehaviour {
 		Vector3 newForward = (mWaypointsFactory.getDir (
 			                         gameObject.transform.position));
 
+		mWaypointsFactory.getNextWaypoint (gameObject.transform.position);
+
 		//Create new object in order to have a new transform to handle rotation as quaternions
 		/*GameObject tempGameObject = new GameObject();
 		Transform aux = tempGameObject.transform;
@@ -78,7 +81,7 @@ public class MoveVehicle : MonoBehaviour {
 		Destroy (tempGameObject);*/
 		//transform.rotation = Quaternion.LookRotation (newForward);
 
-		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime);
+		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), 0.2f);
 			
 		//http://answers.unity3d.com/questions/1192454/bug-transformup-transformup-sets-y-rotation-to-0.html
 
@@ -92,6 +95,14 @@ public class MoveVehicle : MonoBehaviour {
 
 		gameObject.transform.position = gameObject.transform.position
 			+ gameObject.transform.TransformDirection (new Vector3 (xAxisValue, 0.0f, forwardValue));
+
+		int closestWaypoint = mWaypointsFactory.getCurrentWaypointIndex (gameObject.transform.position);
+		if (closestWaypoint == 0 && currentWayPoint != 0) {
+		
+			++lapsDone;
+			lapsController.setLapsDone (lapsDone);
+		}
+		currentWayPoint = closestWaypoint;
 	}
 
 
