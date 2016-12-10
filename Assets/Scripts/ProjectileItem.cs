@@ -13,7 +13,7 @@ public class ProjectileItem : MonoBehaviour {
 
 		Ray ray = new Ray(transform.position, transform.forward);
 		RaycastHit hit;
-		if (Physics.Raycast (ray, out hit,1.0f)) {
+		if (Physics.Raycast (ray, out hit,4.0f)) {
 			autoDestroy ();
 		}
 	}
