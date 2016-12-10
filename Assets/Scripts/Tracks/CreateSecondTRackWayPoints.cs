@@ -34,7 +34,7 @@ public class CreateSecondTRackWayPoints : BaseCreateTrackWaypoints {
 		float centerOffsetY = -50.0f;
 		Vector3 center = new Vector3 (0,-centerOffsetY,-centerOffsetZ);
 		float radius = 3330.0f;
-		int numberOfPoints = 50;
+		int numberOfPoints = 500;
 		float deltaAlpha = (2 * Mathf.PI) / numberOfPoints;
 		float alphaOffset = 1.2f;
 

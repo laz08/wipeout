@@ -61,29 +61,20 @@ public class MoveVehicle : MonoBehaviour {
 
 		// Correct forward.
 
-
-		//http://answers.unity3d.com/questions/351899/rotation-lerp.html
-
 		Vector3 newForward = (mWaypointsFactory.getDir (
 			                         gameObject.transform.position));
 
 		mWaypointsFactory.getNextWaypoint (gameObject.transform.position);
 
-		//Create new object in order to have a new transform to handle rotation as quaternions
-		/*GameObject tempGameObject = new GameObject();
-		Transform aux = tempGameObject.transform;
-		//Rotation to go from actual position to forward result 
-		aux.rotation = Quaternion.LookRotation(newForward, -transform.right);
-		aux.Rotate (Vector3.up, 90f);
-		//Apply an smooth rotation
-		transform.rotation = Quaternion.Slerp (transform.rotation,aux.rotation,Time.deltaTime);
-		//transform.rotation = aux.rotation;
-		Destroy (tempGameObject);*/
-		//transform.rotation = Quaternion.LookRotation (newForward);
 
-		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), 0.2f);
+		if (mWaypointsFactory as CreateFirstTrackWaypoints) {
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), 0.2f);
+		}
+		else if(mWaypointsFactory as CreateSecondTRackWayPoints) {
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime);
+			//transform.rotation = Quaternion.LookRotation(newForward);
+		}
 			
-		//http://answers.unity3d.com/questions/1192454/bug-transformup-transformup-sets-y-rotation-to-0.html
 
 
 	/*	gameObject.transform.forward =  (
@@ -152,7 +143,8 @@ public class MoveVehicle : MonoBehaviour {
 			aux.rotation = Quaternion.LookRotation(hit.normal, -transform.forward);
 			aux.Rotate (Vector3.right, 90f);
 			//Apply an smooth rotation
-			transform.rotation = Quaternion.Slerp (transform.rotation,aux.rotation,Time.deltaTime*20);
+			transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 20);
+
 			//transform.rotation = aux.rotation;
 			Destroy (tempGameObject);
 

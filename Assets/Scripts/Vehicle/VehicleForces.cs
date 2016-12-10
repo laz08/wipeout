@@ -6,6 +6,8 @@ public class VehicleForces : MonoBehaviour {
 	public float hoverForce = 65f;
 	public float hoverHeight = 3.5f;
 
+	public BaseCreateTrackWaypoints mWaypointsFactory;
+
 	float gravity = -9.8f;
 	Vector3 gravityDir = new Vector3(0.0f,1.0f,0.0f);
 	Rigidbody vehicleRigidBody;
@@ -19,8 +21,11 @@ public class VehicleForces : MonoBehaviour {
 
 	void FixedUpdate() {
 		//Add gravity force
-		vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.VelocityChange);
-
+		if(mWaypointsFactory as CreateFirstTrackWaypoints)
+			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.VelocityChange);
+		else
+			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.Acceleration);
+		
 		Ray ray = new Ray (transform.position, -transform.up);
 		RaycastHit hit;
 
@@ -36,7 +41,7 @@ public class VehicleForces : MonoBehaviour {
 			//vehicleRigidBody.AddForce(hit.normal*gravity);
 		}
 
-		/*
+
         //Maybe do more than one rayast per position(ex, no tjust at the center, to it to at the vehicle top and bottom)
         Ray rayLeft = new Ray(transform.position - new Vector3(boxC.size.x/2.0f, 0.0f,0.0f), -transform.up);
         Ray rayRight = new Ray(transform.position + new Vector3( boxC.size.x/2.0f, 0.0f, 0.0f), -transform.up);
@@ -46,7 +51,7 @@ public class VehicleForces : MonoBehaviour {
             //vehicleRigidBody.AddForce(-5*dirforce);
             transform.Translate(dirForce, Space.World);
         }
-		*/
+
 	}
 
 }
