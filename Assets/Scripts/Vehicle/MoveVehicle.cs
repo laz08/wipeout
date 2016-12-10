@@ -47,13 +47,23 @@ public class MoveVehicle : MonoBehaviour {
 			manageManualMovement ();
 		}
 			
+		checkHasLapBeenDone ();
+		changeUpDirection();
 	}
 
 	/*
 	 * Manages automatic movement
 	 */
 	private void manageAutomaticMovement(){
-	
+
+		applyDirToVehicle ();
+
+		float forwardValue = moveForwardAutomatic ();
+
+		float xAxisValue = turnVehicleAutomatic ();
+
+		gameObject.transform.position = gameObject.transform.position
+			+ gameObject.transform.TransformDirection (new Vector3 (xAxisValue, 0.0f, forwardValue));
 
 	}
 
@@ -65,14 +75,26 @@ public class MoveVehicle : MonoBehaviour {
 		if (mIsRotationFree) {
 
 			applyFreeMovement ();
-			// Corrects up.
 
 		} else {
 
 			followTrackWaypoints ();
 		}
+	}
 
-		changeUpDirection();
+
+	private void applyDirToVehicle(){
+		Vector3 newForward = (mWaypointsFactory.getDir (
+			gameObject.transform.position));
+
+
+		if (mWaypointsFactory as CreateFirstTrackWaypoints) {
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), 0.2f);
+		}
+		else if(mWaypointsFactory as CreateSecondTRackWayPoints) {
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime);
+			//transform.rotation = Quaternion.LookRotation(newForward);
+		}
 	}
 
 	/**
@@ -84,35 +106,21 @@ public class MoveVehicle : MonoBehaviour {
 
 		// Correct forward.
 
-		Vector3 newForward = (mWaypointsFactory.getDir (
-			                         gameObject.transform.position));
+		applyDirToVehicle ();
 
-		mWaypointsFactory.getNextWaypoint (gameObject.transform.position);
-
-
-		if (mWaypointsFactory as CreateFirstTrackWaypoints) {
-			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), 0.2f);
-		}
-		else if(mWaypointsFactory as CreateSecondTRackWayPoints) {
-			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime);
-			//transform.rotation = Quaternion.LookRotation(newForward);
-		}
-			
-
-
-	/*	gameObject.transform.forward =  (
-			mWaypointsFactory.getDir(
-				gameObject.transform.position));
-	*/
 		float forwardValue = moveForward();
 		float xAxisValue = Input.GetAxis ("Horizontal") * xAxisSpeed * Time.deltaTime;
 
 		gameObject.transform.position = gameObject.transform.position
 			+ gameObject.transform.TransformDirection (new Vector3 (xAxisValue, 0.0f, forwardValue));
 
+	}
+
+	private void checkHasLapBeenDone(){
+
 		int closestWaypoint = mWaypointsFactory.getCurrentWaypointIndex (gameObject.transform.position);
 		if (closestWaypoint == 0 && currentWayPoint != 0) {
-		
+
 			++lapsDone;
 			lapsController.setLapsDone (lapsDone);
 		}
@@ -134,6 +142,39 @@ public class MoveVehicle : MonoBehaviour {
 			decrementSpeed ();
 		}
 		return  speedZ * Time.deltaTime;
+	}
+
+	/**
+	 * Moves vehicle forward.
+	 */
+	float moveForwardAutomatic(){
+
+		float shouldAccelerate = Random.value;
+		if (shouldAccelerate < 0.8f) {
+
+			augmentSpeed ();
+		} else {
+
+			decrementSpeed ();
+		}
+		return  speedZ * Time.deltaTime;
+	}
+
+	/**
+	 * Moves vehicle forward.
+	 */
+	float turnVehicleAutomatic(){
+
+		float shouldTurn = Random.value;
+		if (shouldTurn <= 0.6f) {
+
+			return 0;
+		}
+		if(shouldTurn > 0.6f && shouldTurn < 0.65f) {
+
+			return xAxisSpeed * Time.deltaTime;
+		}
+		return  -xAxisSpeed * Time.deltaTime;
 	}
 
 
