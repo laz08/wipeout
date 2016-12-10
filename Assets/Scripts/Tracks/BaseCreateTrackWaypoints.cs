@@ -17,12 +17,13 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 	public bool shouldWaypointsBeInstantiated= false;
 
 	// Use this for initialization
-	public virtual void Start () {
-	
+	public virtual void Start (){
+
 		// In derived classes:
 		// 1.- Initialize waypoints
 		// 2.- call instantiateWaypoints() method.
 	}
+
 
 
 	// ------------------------------------------------

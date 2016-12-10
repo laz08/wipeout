@@ -17,7 +17,7 @@ public class CreateSecondTRackWayPoints : BaseCreateTrackWaypoints {
 	}
 
 	void Update(){
-		if(shouldWaypointsBeInstantiated){
+		if(drawWaypointsAndLines){
 
 			DrawLines ();
 		}

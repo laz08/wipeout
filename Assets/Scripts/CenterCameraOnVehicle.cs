@@ -4,9 +4,9 @@ using System.Collections;
 public class CenterCameraOnVehicle : MonoBehaviour {
 
 	public GameObject mUserVehicle;
-	private float mDefaultXOffset = -4.2f;
-	private float mOffsetY = 15.58f;
-	private float mOffsetZ = -38.7f;
+	private float mDefaultXOffset = 0.0f;
+	private float mOffsetY = 7.0f;
+	public float mOffsetZ = -25.0f;
 	// Use this for initialization
 	void Start () {
 
@@ -25,5 +25,6 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 				mOffsetY, 
 				mOffsetZ);
 
+		transform.LookAt(mUserVehicle.transform.position);
 	}
 }
