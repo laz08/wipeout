@@ -23,7 +23,7 @@ public class MoveVehicle : MonoBehaviour {
 
 	//Movement in X Axis.
 	public float xAxisSpeed = 500.0f;
-	public bool automaticMove = false;
+	public bool isAutomaticMove = false;
 
 	private int lapsDone = 0;
 
@@ -39,6 +39,29 @@ public class MoveVehicle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if (isAutomaticMove) {
+
+			manageAutomaticMovement ();
+		} else {
+
+			manageManualMovement ();
+		}
+			
+	}
+
+	/*
+	 * Manages automatic movement
+	 */
+	private void manageAutomaticMovement(){
+	
+
+	}
+
+	/**
+	 * Manages manual movement
+	 */
+	private void manageManualMovement(){
+
 		if (mIsRotationFree) {
 
 			applyFreeMovement ();
@@ -51,7 +74,6 @@ public class MoveVehicle : MonoBehaviour {
 
 		changeUpDirection();
 	}
-
 
 	/**
 	 *
