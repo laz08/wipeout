@@ -19,8 +19,8 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 			mOffsetZ = -25.0f;
 		} else {
 			mDefaultXOffset = 0.0f;
-			mOffsetY = 15.58f;
-			mOffsetZ = -38.7f;
+			mOffsetY = 15.0f;
+			mOffsetZ = -45.0f;
 		}
 	}
 	
@@ -34,7 +34,11 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 				mDefaultXOffset, 
 				mOffsetY, 
 				mOffsetZ);
-
-		transform.LookAt(mUserVehicle.transform.position);
+		if (!isSecondTrack)
+			transform.LookAt (mUserVehicle.transform.position);
+		else {
+			Vector3 offsetLookAt = mUserVehicle.transform.InverseTransformVector (new Vector3 (0.0f, mOffsetY/1.8f,0.0f));
+			transform.LookAt (mUserVehicle.transform.position +offsetLookAt);
+		}
 	}
 }

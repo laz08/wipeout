@@ -99,7 +99,7 @@ public class MoveVehicle : MonoBehaviour {
 			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), 0.2f);
 		}
 		else if(mWaypointsFactory as CreateSecondTRackWayPoints) {
-			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime);
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime*0.5f);
 			//transform.rotation = Quaternion.LookRotation(newForward);
 		}
 	}
@@ -209,7 +209,12 @@ public class MoveVehicle : MonoBehaviour {
 			aux.rotation = Quaternion.LookRotation(hit.normal, -transform.forward);
 			aux.Rotate (Vector3.right, 90f);
 			//Apply an smooth rotation
-			transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 20);
+
+			if (mWaypointsFactory as CreateFirstTrackWaypoints) 
+				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 20);
+			else if (mWaypointsFactory as CreateSecondTRackWayPoints)
+				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime*10);
+
 
 			//transform.rotation = aux.rotation;
 			Destroy (tempGameObject);
