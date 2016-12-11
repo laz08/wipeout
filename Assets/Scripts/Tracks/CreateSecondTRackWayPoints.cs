@@ -6,9 +6,8 @@ using System.Linq;
 public class CreateSecondTRackWayPoints : BaseCreateTrackWaypoints {
 
 
-	// Use this for initialization
-	void Start () {
-
+	void Awake(){
+	
 		initializeWaypointsArray ();
 		if(shouldWaypointsBeInstantiated){
 

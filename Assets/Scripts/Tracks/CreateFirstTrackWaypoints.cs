@@ -7,7 +7,7 @@ public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 
 		initializeWaypointsArray ();
 		if(shouldWaypointsBeInstantiated){
