@@ -14,6 +14,8 @@ public class MoveVehicle : MonoBehaviour {
 	public float xAxisSpeed = 15.0f;
 	public bool isPlayerVehicle = true;
 
+	public Vector3 offsetStartPosition = new Vector3 (0, 0, 0);
+
 	private float speedZ = 0.0f;
 	private int lapsDone = 0;
 	private int currentWayPoint;
@@ -23,18 +25,23 @@ public class MoveVehicle : MonoBehaviour {
 
     void Start()
     {
-       
+		applyDirToVehicle ();
 		currentWayPoint = 0;
-		transform.position = mWaypointsFactory.getWaypoint (0);
+		transform.position = mWaypointsFactory.getWaypoint (0)
+			+ transform.TransformDirection (offsetStartPosition);
     }
 
 	// Update is called once per frame
 	void Update () {
 
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
+		
 			timeDamagedCountdown -= Time.deltaTime;
 			transform.Rotate (0.0f, 500.0f*Time.deltaTime, 0.0f);
+		
 		} else { //Can move
+		
+			applyDirToVehicle ();
 			if (!isPlayerVehicle) {
 
 				manageAutomaticMovement ();
@@ -64,7 +71,6 @@ public class MoveVehicle : MonoBehaviour {
 	 */
 	private void manageAutomaticMovement(){
 
-		applyDirToVehicle ();
 		float forwardValue = moveForwardAutomatic ();
 
 		float xAxisValue = turnVehicleAutomatic ();
@@ -78,9 +84,7 @@ public class MoveVehicle : MonoBehaviour {
 	 * Manages manual movement
 	 */
 	private void manageManualMovement(){
-
-		applyDirToVehicle ();
-
+		
 		float forwardValue = moveForward();
 		float xAxisValue = Input.GetAxis ("Horizontal") * xAxisSpeed * Time.deltaTime;
 

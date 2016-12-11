@@ -117,7 +117,11 @@ public class BaseCreateTrackWaypoints : MonoBehaviour {
 
 	public Vector3 getWaypoint(int index)
 	{
-		return mWayPoints[index % (mWayPoints.Length - 1)];
+		if (mWayPoints != null) {
+			
+			return mWayPoints [index % (mWayPoints.Length - 1)];
+		}
+		return new Vector3 (0, 0, 0);
 	}
 
 
