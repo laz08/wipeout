@@ -11,6 +11,8 @@ public class ItemVehicle : MonoBehaviour {
 
 	public GameObject projectile;
 
+	public bool isPlayer = true;
+
 	public float turboTime = 1.0f;
 	public float turboSpeed = 150.0f;
 	private float turboCountDown = 0.0f;
@@ -28,21 +30,18 @@ public class ItemVehicle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//Check if user activates actual item
-	    if (actualItem != Items.NONE && (Input.GetKey ("e")) ) {
-			if (actualItem == Items.TURBO) {
-				turboActivate = true;
-				turboCountDown = turboTime;
-				actualItem = Items.NONE;
+		if (actualItem != Items.NONE) {
+			if (isPlayer) {
+				//Check if user activates actual item
+				if (Input.GetKey ("e")) {
+					activateItem ();
+				}
+			} else {
+				float shouldThrow = Random.value;
+				if (shouldThrow < 0.15f) 
+					activateItem();
 			}
-			if (actualItem == Items.PROJECTILE) {
-				Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z/2 + boxProjectile.z);
-				offset = transform.TransformVector (offset);
-				Instantiate(projectile,transform.position + offset,transform.rotation);
-				actualItem = Items.NONE;
-			}
-			itemActivatedEffect();//Set to NONE
-        }
+		}
 
 		//Check if the vehicle is in a velocity ramp
 		Ray ray = new Ray(transform.position, -transform.up);
@@ -65,6 +64,22 @@ public class ItemVehicle : MonoBehaviour {
 				//TODO:add velocity visual effect
 			}
 		}
+	}
+
+	void activateItem() { //Throws actual item
+		if (actualItem == Items.TURBO) {
+			turboActivate = true;
+			turboCountDown = turboTime;
+			actualItem = Items.NONE;
+		}
+		if (actualItem == Items.PROJECTILE) {
+			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z + boxProjectile.z);
+			offset = transform.TransformVector (offset);
+			GameObject misil = (GameObject)Instantiate(projectile,transform.position + offset,transform.rotation);
+			misil.GetComponent<ProjectileItem>().setVehicle (gameObject);
+			actualItem = Items.NONE;
+		}
+		itemActivatedEffect();//Set to NONE
 	}
 
     void OnCollisionEnter(Collision collision) {

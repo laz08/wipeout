@@ -37,7 +37,7 @@ public class VehicleForces : MonoBehaviour {
             lastHitPosition = transform.position;
 			float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
 			Vector3 appliedHoverForce = hit.normal * proportionalHeight * hoverForce;
-			vehicleRigidBody.AddForce (appliedHoverForce, ForceMode.Acceleration);
+			//vehicleRigidBody.AddForce (appliedHoverForce, ForceMode.Acceleration);
 			//Change gravity direction
 			gravityDir = hit.normal;
 			//Still need to improve this gravity change
