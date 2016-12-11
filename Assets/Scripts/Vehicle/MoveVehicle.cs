@@ -33,7 +33,7 @@ public class MoveVehicle : MonoBehaviour {
 
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
 			timeDamagedCountdown -= Time.deltaTime;
-			transform.Rotate (0.0f, 500.0f*Time.deltaTime, 0.0f);
+			transform.Rotate (0.0f, 250.0f*Time.deltaTime, 0.0f);
 		} else { //Can move
 			if (!isPlayerVehicle) {
 
@@ -140,7 +140,7 @@ public class MoveVehicle : MonoBehaviour {
 	float moveForwardAutomatic(){
 
 		float shouldAccelerate = Random.value;
-		if (shouldAccelerate < 0.8f) {
+		if (shouldAccelerate < 0.9f) {
 
 			augmentSpeed ();
 		} else {
@@ -225,5 +225,8 @@ public class MoveVehicle : MonoBehaviour {
         }
     }
 
+	public float getSpeed(){
+		return speedZ;
+	}
 
 }
