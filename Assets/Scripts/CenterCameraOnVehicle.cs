@@ -4,12 +4,24 @@ using System.Collections;
 public class CenterCameraOnVehicle : MonoBehaviour {
 
 	public GameObject mUserVehicle;
-	private float mDefaultXOffset = 0.0f;
-	private float mOffsetY = 7.0f;
-	public float mOffsetZ = -25.0f;
+
+	private float mDefaultXOffset;
+	private float mOffsetY;
+	public float mOffsetZ;
+	public bool isSecondTrack = false; //True for first track. False for torus.
+
+
 	// Use this for initialization
 	void Start () {
-
+		if (!isSecondTrack) {
+			mDefaultXOffset = 0.0f;
+			mOffsetY = 15.0f;
+			mOffsetZ = -25.0f;
+		} else {
+			mDefaultXOffset = 0.0f;
+			mOffsetY = 15.58f;
+			mOffsetZ = -38.7f;
+		}
 	}
 	
 	// Update is called once per frame
@@ -17,8 +29,6 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 
 		transform.position = mUserVehicle.transform.position;
 	
-		//transform.forward = -mUserVehicle.transform.forward;
-		//transform.LookAt(mUserVehicle.transform.position);
 		transform.localPosition = 
 			new Vector3 (
 				mDefaultXOffset, 

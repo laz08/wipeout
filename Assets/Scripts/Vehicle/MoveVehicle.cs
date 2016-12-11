@@ -12,12 +12,14 @@ public class MoveVehicle : MonoBehaviour {
 
 	//Movement in X Axis.
 	public float xAxisSpeed = 15.0f;
-	public bool isAutomaticMove = false;
 	public bool isPlayerVehicle = true;
 
 	private float speedZ = 0.0f;
 	private int lapsDone = 0;
 	private int currentWayPoint;
+
+	private float timeDamaged = 3.0f;//Time damage animation takes
+	private float timeDamagedCountdown = 0.0f;
 
     void Start()
     {
@@ -29,14 +31,18 @@ public class MoveVehicle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (isAutomaticMove) {
+		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
+			timeDamagedCountdown -= Time.deltaTime;
+			transform.Rotate (0.0f, 500.0f*Time.deltaTime, 0.0f);
+		} else { //Can move
+			if (!isPlayerVehicle) {
 
-			manageAutomaticMovement ();
-		} else {
+				manageAutomaticMovement ();
+			} else {
 
-			manageManualMovement ();
+				manageManualMovement ();
+			}
 		}
-			
 		checkHasLapBeenDone ();
 		changeUpDirection();
 	}
@@ -45,6 +51,12 @@ public class MoveVehicle : MonoBehaviour {
 	public int getLapsDone(){
 
 		return lapsDone;
+	}
+
+	void OnCollisionEnter(Collision collision) {
+		if (collision.gameObject.tag == "Missile") { //Vehicle gets damaged
+			timeDamagedCountdown = timeDamaged;
+		}
 	}
 
 	/*
