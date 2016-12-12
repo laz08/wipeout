@@ -59,10 +59,10 @@ public class VehicleForces : MonoBehaviour {
 
 		if (addForceAsVelocity) { //First track
 			//Check not to go away the track
-			Ray rayUpR = new Ray (transform.position + new Vector3 (boxC.size.x*(3/2), 0.0f, boxC.size.z), -transform.up);
-			Ray rayUpL = new Ray (transform.position + new Vector3 (-boxC.size.x*(3/2), 0.0f, boxC.size.z), -transform.up);
-			Ray rayDownR = new Ray (transform.position + new Vector3 (boxC.size.x*(3/2), 0.0f, -boxC.size.z), -transform.up);
-			Ray rayDownL = new Ray (transform.position + new Vector3 (-boxC.size.x*(3/2), 0.0f, -boxC.size.z), -transform.up);
+			Ray rayUpR = new Ray (transform.position + new Vector3 (boxC.size.x * (3 / 2), 0.0f, boxC.size.z), -transform.up);
+			Ray rayUpL = new Ray (transform.position + new Vector3 (-boxC.size.x * (3 / 2), 0.0f, boxC.size.z), -transform.up);
+			Ray rayDownR = new Ray (transform.position + new Vector3 (boxC.size.x * (3 / 2), 0.0f, -boxC.size.z), -transform.up);
+			Ray rayDownL = new Ray (transform.position + new Vector3 (-boxC.size.x * (3 / 2), 0.0f, -boxC.size.z), -transform.up);
 			RaycastHit hitUR, hitUL, hitDR, hitDL;
 
 			if (!Physics.Raycast (rayUpR, out hitUR) || !Physics.Raycast (rayUpL, out hitUL) || !Physics.Raycast (rayDownR, out hitDR) || !Physics.Raycast (rayDownL, out hitDL)) {
@@ -71,6 +71,14 @@ public class VehicleForces : MonoBehaviour {
 				//vehicleRigidBody.AddForce(-5*dirforce);
 				transform.Translate (dirForce, Space.World);
 			}
+		} else {
+			Ray rayLeft = new Ray(transform.position - new Vector3(boxC.size.x/2.0f, 0.0f,0.0f), -transform.up);
+			Ray rayRight = new Ray(transform.position + new Vector3( boxC.size.x/2.0f, 0.0f, 0.0f), -transform.up);
+			if (!Physics.Raycast(rayLeft, out hit) || !Physics.Raycast(rayRight, out hit)) {
+					Vector3 dirForce = (lastHitPosition-transform.position)*2;
+					//vehicleRigidBody.AddForce(-5*dirforce);
+					transform.Translate(dirForce, Space.World);
+				}
 		}
 
 	}
