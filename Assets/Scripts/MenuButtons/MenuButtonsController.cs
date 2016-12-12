@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MenuButtonsController : MonoBehaviour {
 
@@ -17,6 +18,8 @@ public class MenuButtonsController : MonoBehaviour {
 	private bool isCredits = false;
 	private bool isInstructions = false;
 
+	private static string SELECT_VEHICLE_NAME = "VehicleSelectScreen";
+
 	void Awake(){
 	
 
@@ -26,7 +29,7 @@ public class MenuButtonsController : MonoBehaviour {
 
 	public void onPlayClick(){
 	
-		//Application.LoadLevel (1);
+		SceneManager.LoadScene(SELECT_VEHICLE_NAME);
 	}
 
 	public void onInstructionsClick(){

@@ -14,7 +14,31 @@ public class VehiclesFactory : MonoBehaviour {
 	//private GameObject[] vehiclesList;
 	private List<GameObject> vehiclesList;
 
+	private static string KIRBY_VEHICLE = "Kirby";
+	private static string CORVETTE_VEHICLE = "Corvette";
+	private static string BOAT_VEHICLE = "Boat";
+
+	private static string SELECTED_VEHICLE_KEY = "selectedVehicle";
+
 	void Awake(){
+
+
+		string paramVeh = AssemblyCSharp.SceneController.getParam (SELECTED_VEHICLE_KEY);
+		Debug.Log ("Param veh: " + paramVeh);
+		if (paramVeh != null) {
+
+			if (paramVeh.Equals (CORVETTE_VEHICLE)) {
+
+				selectedVehicle = VehicleType.Corvette;
+			} else if(paramVeh.Equals (BOAT_VEHICLE)){
+
+				selectedVehicle = VehicleType.JusticeBoat;
+			} else {
+				selectedVehicle = VehicleType.Kirby;
+			}
+
+		} 
+
 		vehiclesList = new List<GameObject>();
 		instantiateAllVehicles (0);
 	}
