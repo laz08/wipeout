@@ -36,9 +36,6 @@ public class MoveVehicle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (isPlayerVehicle)
-			Debug.Log (position);
-
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
 		
 			timeDamagedCountdown -= Time.deltaTime;
@@ -58,6 +55,7 @@ public class MoveVehicle : MonoBehaviour {
 		changeUpDirection();
 
 		actualPosition = lapsDone * 10000f + currentWayPoint;
+		if (isPlayerVehicle) lapsController.setPositionText (position);
 	}
 
 	public int getLapsDone(){

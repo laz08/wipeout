@@ -9,6 +9,8 @@ public class PlayerLapsController : MonoBehaviour {
 	public RawImage itemImage;
 
 	public int maxLaps = 3;
+	private float positionWaitTime = 0.15f;
+	private float positionCountDown = 0.0f;
 
 	void Start(){
 
@@ -26,8 +28,31 @@ public class PlayerLapsController : MonoBehaviour {
 	}
 
 	public void setPositionText(int pos){
-	
-		//Do sth
+		//Not do it every frame in order to not have epilepsy
+		if (positionCountDown <= 0.0f) {
+			string position = pos.ToString ();
+			switch (pos) {
+			case 1:
+				positionText.color = Color.yellow;
+				position += " st";
+				break;
+			case 2:
+				positionText.color = Color.green;
+				position += " nd";
+				break;
+			case 3:
+				positionText.color = Color.cyan;
+				position += " nd";
+				break;
+			default:
+				positionText.color = Color.red;
+				position += " th";
+				break;
+			}
+			positionText.text = position;
+			positionCountDown = positionWaitTime;
+		} else
+			positionCountDown -= Time.deltaTime;
 	}
 		
 }
