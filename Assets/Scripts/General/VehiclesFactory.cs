@@ -86,12 +86,17 @@ public class VehiclesFactory : MonoBehaviour {
 			obj.GetComponent<MoveVehicle> ().accZ *= 2;
 			obj.GetComponent<MoveVehicle> ().maxSpeedForward *= 2;
 
-			obj.GetComponent<BoxCollider> ().size += new Vector3 (3.0f, 10.0f, 0.0f);
+			obj.GetComponent<BoxCollider> ().size += new Vector3 (2.0f, 9.0f, 0.0f);
 
 			obj.GetComponent<VehicleForces> ().addForceAsVelocity = false;
 
-		} else if (type == VehicleType.Kirby) { //reescale kirby on first track
-			obj.transform.localScale = new Vector3 (0.5f,0.5f,0.5f);
+			obj.GetComponent<ItemVehicle> ().turboSpeed = 150.0f;
+
+		} else  {
+
+			if (type == VehicleType.Kirby) { //reescale kirby on first track
+				obj.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+			}
 		}
 
 		if (isPlayer) {

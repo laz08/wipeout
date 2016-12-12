@@ -21,7 +21,7 @@ public class MoveVehicle : MonoBehaviour {
 	private int currentWayPoint;
 
 	private float timeDamaged = 3.0f;//Time damage animation takes
-	private float timeDamagedCountdown = 0.0f;
+	public float timeDamagedCountdown = 0.0f;
 
     void Start()
     {
@@ -53,7 +53,6 @@ public class MoveVehicle : MonoBehaviour {
 		changeUpDirection();
 	}
 
-
 	public int getLapsDone(){
 
 		return lapsDone;
@@ -62,6 +61,9 @@ public class MoveVehicle : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "DamageItem") { //Vehicle gets damaged
 			timeDamagedCountdown = timeDamaged;
+		}
+		if (collision.gameObject.tag == "Vehicle") {
+			//Ignore
 		}
 	}
 
@@ -145,7 +147,7 @@ public class MoveVehicle : MonoBehaviour {
 	float moveForwardAutomatic(){
 
 		float shouldAccelerate = Random.value;
-		if (shouldAccelerate < 0.9f) {
+		if (shouldAccelerate < 0.95f) {
 
 			augmentSpeed ();
 		} else {
@@ -165,7 +167,7 @@ public class MoveVehicle : MonoBehaviour {
 
 			return 0;
 		}
-		if(shouldTurn > 0.6f && shouldTurn < 0.65f) {
+		if(shouldTurn > 0.64f && shouldTurn < 0.65f) {
 
 			return xAxisSpeed * Time.deltaTime;
 		}

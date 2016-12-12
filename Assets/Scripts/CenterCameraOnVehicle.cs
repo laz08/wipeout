@@ -16,7 +16,7 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 		if (!isSecondTrack) {
 			mDefaultXOffset = 0.0f;
 			mOffsetY = 15.0f;
-			mOffsetZ = -25.0f;
+			mOffsetZ = -35.0f;
 		} else {
 			mDefaultXOffset = 0.0f;
 			mOffsetY = 15.0f;

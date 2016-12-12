@@ -15,7 +15,7 @@ public class ItemVehicle : MonoBehaviour {
 	public bool isPlayer = true;
 
 	public float turboTime = 1.0f;
-	public float turboSpeed = 100.0f;
+	public float turboSpeed = 75.0f;
 	private float turboCountDown = 0.0f;
 	private bool turboActivate = false;
 
@@ -30,6 +30,10 @@ public class ItemVehicle : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (GetComponent<MoveVehicle> ().timeDamagedCountdown > 0.0f)
+			return;
+
 		if (actualItem != Items.NONE) {
 			if (isPlayer) {
 				//Check if user activates actual item
@@ -77,6 +81,7 @@ public class ItemVehicle : MonoBehaviour {
 			offset = transform.TransformVector (offset);
 			GameObject misil = (GameObject)Instantiate(projectile,transform.position + offset,transform.rotation);
 			misil.GetComponent<ProjectileItem>().setVehicle (gameObject);
+			Physics.IgnoreCollision (misil.GetComponent<BoxCollider> (), GetComponent<BoxCollider> ());
 			actualItem = Items.NONE;
 		}
 		if (actualItem == Items.BOMB) {
