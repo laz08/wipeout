@@ -33,7 +33,7 @@ public class VehicleForces : MonoBehaviour {
 
 		if (addForceAsVelocity) {
 			
-			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.VelocityChange);
+			//vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.VelocityChange);
 		} else {
 		
 			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.Acceleration);

@@ -66,6 +66,7 @@ public class VehiclesFactory : MonoBehaviour {
 				}
 			}
 
+			//TODO: put different initial position on the second track!
 			instantiateVehicle (type, isPlayer, new Vector3 (offsetXAxis, 0, i * offsetZAxis));
 		}
 
@@ -112,6 +113,7 @@ public class VehiclesFactory : MonoBehaviour {
 			obj.GetComponent<ItemVehicle> ().turboSpeed = 150.0f;
 
 		} else  {
+			obj.GetComponent<Rigidbody> ().useGravity = true;
 
 			if (type == VehicleType.Kirby) { //reescale kirby on first track
 				obj.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);

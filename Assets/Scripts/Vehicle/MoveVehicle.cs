@@ -17,7 +17,7 @@ public class MoveVehicle : MonoBehaviour {
 	public Vector3 offsetStartPosition = new Vector3 (0, 0, 0);
 
 	private float speedZ = 0.0f;
-	private int lapsDone = 0;
+	public int lapsDone = 0;
 	private int currentWayPoint;
 	public float actualPosition = 0.0f; //Position "score" depending on the waypoints and laps
 	public int position = 0;//Position of the vehicle (first,second,..)
@@ -29,7 +29,7 @@ public class MoveVehicle : MonoBehaviour {
     {
 		applyDirToVehicle ();
 		currentWayPoint = 0;
-		transform.position = mWaypointsFactory.getWaypoint (0)
+		transform.position = mWaypointsFactory.getWaypoint (1)
 			+ transform.TransformDirection (offsetStartPosition);
     }
 
@@ -56,6 +56,8 @@ public class MoveVehicle : MonoBehaviour {
 		}
 		checkHasLapBeenDone ();
 		changeUpDirection();
+
+		actualPosition = lapsDone * 10000f + currentWayPoint;
 	}
 
 	public int getLapsDone(){
@@ -117,7 +119,6 @@ public class MoveVehicle : MonoBehaviour {
 
 		int closestWaypoint = mWaypointsFactory.getCurrentWaypointIndex (gameObject.transform.position);
 		if (closestWaypoint == 0 && currentWayPoint != 0) {
-			actualPosition += 10000.0f;
 			++lapsDone;
 			if (isPlayerVehicle) {
 
@@ -125,8 +126,8 @@ public class MoveVehicle : MonoBehaviour {
 			}
 		}
 		if (currentWayPoint != closestWaypoint)
-			actualPosition += 1.0f;
 		currentWayPoint = closestWaypoint;
+
 	}
 
 
