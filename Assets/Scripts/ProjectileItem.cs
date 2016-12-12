@@ -13,7 +13,6 @@ public class ProjectileItem : MonoBehaviour {
 		//Move towards
 		float vSpeed = vehicle.GetComponent<MoveVehicle>().getSpeed();
 		transform.Translate (0.0f,0.0f,(vSpeed*2+ speed)*Time.deltaTime,Space.Self);
-		Debug.Log(vSpeed*2+ speed);
 
 		Ray ray = new Ray(transform.position, transform.forward);
 		RaycastHit hit;

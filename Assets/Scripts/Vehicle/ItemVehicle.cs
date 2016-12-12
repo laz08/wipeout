@@ -95,8 +95,7 @@ public class ItemVehicle : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (actualItem == Items.NONE && collision.gameObject.tag == "PowerUpItem") {
-			//int item = Random.Range (0, 3);
-			int item =2;
+			int item = Random.Range (0, 3);
 			Debug.Log ("random number: " + item);
 			switch (item) {
 			case 0:
