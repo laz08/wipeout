@@ -46,7 +46,7 @@ public class VehicleForces : MonoBehaviour {
 		}
 
 
-        //Maybe do more than one rayast per position(ex, no tjust at the center, to it to at the vehicle top and bottom)
+        //Maybe do more than one rayast per position(ex, no tjust at the center, do it to at the vehicle top and bottom)
         Ray rayLeft = new Ray(transform.position - new Vector3(boxC.size.x/2.0f, 0.0f,0.0f), -transform.up);
         Ray rayRight = new Ray(transform.position + new Vector3( boxC.size.x/2.0f, 0.0f, 0.0f), -transform.up);
 

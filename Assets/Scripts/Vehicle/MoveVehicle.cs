@@ -37,7 +37,7 @@ public class MoveVehicle : MonoBehaviour {
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
 		
 			timeDamagedCountdown -= Time.deltaTime;
-			transform.Rotate (0.0f, 250.0f*Time.deltaTime, 0.0f);
+			transform.Rotate (0.0f, 240.0f*Time.deltaTime, 0.0f);
 		} else { //Can move
 		
 			applyDirToVehicle ();
@@ -60,7 +60,7 @@ public class MoveVehicle : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision) {
-		if (collision.gameObject.tag == "Missile") { //Vehicle gets damaged
+		if (collision.gameObject.tag == "DamageItem") { //Vehicle gets damaged
 			timeDamagedCountdown = timeDamaged;
 		}
 	}
@@ -99,7 +99,9 @@ public class MoveVehicle : MonoBehaviour {
 
 
 		if (mWaypointsFactory as CreateFirstTrackWaypoints) {
-			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), 0.2f);
+			//transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime*25);
+			transform.rotation = Quaternion.LookRotation(newForward);
+
 		}
 		else if(mWaypointsFactory as CreateSecondTRackWayPoints) {
 			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime*0.5f);

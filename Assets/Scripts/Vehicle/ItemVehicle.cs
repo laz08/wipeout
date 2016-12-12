@@ -4,17 +4,18 @@ using System.Collections;
 public class ItemVehicle : MonoBehaviour {
 
     enum Items {
-           NONE, TURBO, PROJECTILE
+           NONE, TURBO, PROJECTILE, BOMB
     };
 
     Items actualItem;
 
 	public GameObject projectile;
+	public GameObject bomb;
 
 	public bool isPlayer = true;
 
 	public float turboTime = 1.0f;
-	public float turboSpeed = 150.0f;
+	public float turboSpeed = 100.0f;
 	private float turboCountDown = 0.0f;
 	private bool turboActivate = false;
 
@@ -29,14 +30,13 @@ public class ItemVehicle : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
 		if (actualItem != Items.NONE) {
 			if (isPlayer) {
 				//Check if user activates actual item
 				if (Input.GetKey ("e")) {
 					activateItem ();
 				}
-			} else {
+			} else { 
 				float shouldThrow = Random.value;
 				if (shouldThrow < 0.15f) 
 					activateItem();
@@ -73,10 +73,16 @@ public class ItemVehicle : MonoBehaviour {
 			actualItem = Items.NONE;
 		}
 		if (actualItem == Items.PROJECTILE) {
-			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z + boxProjectile.z);
+			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z*2 + boxProjectile.z);
 			offset = transform.TransformVector (offset);
 			GameObject misil = (GameObject)Instantiate(projectile,transform.position + offset,transform.rotation);
 			misil.GetComponent<ProjectileItem>().setVehicle (gameObject);
+			actualItem = Items.NONE;
+		}
+		if (actualItem == Items.BOMB) {
+			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z/2 + boxProjectile.z);
+			offset = transform.TransformVector (offset);
+			Instantiate(bomb,transform.position - offset,transform.rotation);
 			actualItem = Items.NONE;
 		}
 		itemActivatedEffect();//Set to NONE
@@ -84,8 +90,8 @@ public class ItemVehicle : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (actualItem == Items.NONE && collision.gameObject.tag == "PowerUpItem") {
-			//int item = Random.Range (0, 2);
-			int item  = 1;
+			//int item = Random.Range (0, 3);
+			int item =2;
 			Debug.Log ("random number: " + item);
 			switch (item) {
 			case 0:
@@ -94,10 +100,14 @@ public class ItemVehicle : MonoBehaviour {
 			case 1:
 				actualItem = Items.PROJECTILE;
 				break;
+			case 2:
+				actualItem = Items.BOMB;
+				break;
 			default:
 				break;
 			}
-			itemActivatedEffect();
+
+			if (isPlayer) itemActivatedEffect();
         }
     }
 
@@ -113,6 +123,9 @@ public class ItemVehicle : MonoBehaviour {
 
 			break;
 		case Items.PROJECTILE:
+
+			break;
+		case Items.BOMB:
 
 			break;
 		default:

@@ -7,7 +7,7 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 
 	private float mDefaultXOffset;
 	private float mOffsetY;
-	public float mOffsetZ;
+	private float mOffsetZ;
 	public bool isSecondTrack = false; //True for first track. False for torus.
 
 
