@@ -5,6 +5,9 @@ using System.Collections;
 public class PlayerLapsController : MonoBehaviour {
 
 	public Text lapsText;
+	public Text positionText;
+	public RawImage itemImage;
+
 	public int maxLaps = 3;
 
 	void Start(){
@@ -21,4 +24,10 @@ public class PlayerLapsController : MonoBehaviour {
 
 		lapsText.text = getLapsText (lapsDone);
 	}
+
+	public void setPositionText(int pos){
+	
+		//Do sth
+	}
+		
 }

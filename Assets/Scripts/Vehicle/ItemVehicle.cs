@@ -4,13 +4,14 @@ using System.Collections;
 public class ItemVehicle : MonoBehaviour {
 
     enum Items {
-           NONE, TURBO, PROJECTILE, BOMB
+           NONE, TURBO, PROJECTILE, BOMB, SHIELD
     };
 
     Items actualItem;
 
 	public GameObject projectile;
 	public GameObject bomb;
+	public GameObject shield;
 
 	public bool isPlayer = true;
 
@@ -18,6 +19,11 @@ public class ItemVehicle : MonoBehaviour {
 	public float turboSpeed = 75.0f;
 	private float turboCountDown = 0.0f;
 	private bool turboActivate = false;
+
+	private float shieldTime = 6.0f;
+	public float shieldCountDown = 0.0f;
+	private bool shieldDestroyed = true;
+	GameObject shieldInstance;
 
 	Vector3 boxSelf,boxProjectile;
 
@@ -47,6 +53,14 @@ public class ItemVehicle : MonoBehaviour {
 			}
 		}
 
+		if (!shieldDestroyed) {
+			if (shieldCountDown < 0.0f) {
+				Destroy (shieldInstance);
+				shieldDestroyed = true;
+			} else {
+				shieldCountDown -= Time.deltaTime;
+			}
+		}
 		//Check if the vehicle is in a velocity ramp
 		Ray ray = new Ray(transform.position, -transform.up);
 		RaycastHit hit;
@@ -74,7 +88,6 @@ public class ItemVehicle : MonoBehaviour {
 		if (actualItem == Items.TURBO) {
 			turboActivate = true;
 			turboCountDown = turboTime;
-			actualItem = Items.NONE;
 		}
 		if (actualItem == Items.PROJECTILE) {
 			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z*2 + boxProjectile.z);
@@ -82,20 +95,32 @@ public class ItemVehicle : MonoBehaviour {
 			GameObject misil = (GameObject)Instantiate(projectile,transform.position + offset,transform.rotation);
 			misil.GetComponent<ProjectileItem>().setVehicle (gameObject);
 			Physics.IgnoreCollision (misil.GetComponent<BoxCollider> (), GetComponent<BoxCollider> ());
-			actualItem = Items.NONE;
 		}
 		if (actualItem == Items.BOMB) {
 			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z/2 + boxProjectile.z);
 			offset = transform.TransformVector (offset);
 			Instantiate(bomb,transform.position - offset,transform.rotation);
-			actualItem = Items.NONE;
 		}
+		if (actualItem == Items.SHIELD) {
+			if (!shieldDestroyed)
+				Destroy (shieldInstance);
+			shieldInstance = (GameObject)Instantiate (shield, transform.position, transform.rotation);
+			shieldInstance.transform.SetParent (transform);
+			float ScaleValue = 1.3f*Mathf.Max (Mathf.Max (boxSelf.x, boxSelf.y), boxSelf.z);
+			shieldInstance.transform.localScale = new Vector3 (ScaleValue, ScaleValue, ScaleValue);
+			Color itemColor = shieldInstance.GetComponent<MeshRenderer>().material.color;
+			itemColor.a = 0.4f;
+			shieldInstance.GetComponent<MeshRenderer>().material.color = itemColor;
+			shieldCountDown = shieldTime;
+			shieldDestroyed = false;
+		}
+		actualItem = Items.NONE;
 		itemActivatedEffect();//Set to NONE
 	}
 
     void OnCollisionEnter(Collision collision) {
         if (actualItem == Items.NONE && collision.gameObject.tag == "PowerUpItem") {
-			int item = Random.Range (1, 3);
+			int item = Random.Range (1, 4);
 			Debug.Log ("random number: " + item);
 			switch (item) {
 			case 0:
@@ -106,6 +131,9 @@ public class ItemVehicle : MonoBehaviour {
 				break;
 			case 2:
 				actualItem = Items.BOMB;
+				break;
+			case 3:
+				actualItem = Items.SHIELD;
 				break;
 			default:
 				break;

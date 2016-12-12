@@ -66,7 +66,7 @@ public class MoveVehicle : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision) {
-		if (collision.gameObject.tag == "DamageItem") { //Vehicle gets damaged
+		if (collision.gameObject.tag == "DamageItem" && GetComponent<ItemVehicle>().shieldCountDown <= 0.0f) { //Vehicle gets damaged
 			timeDamagedCountdown = timeDamaged;
 		}
 	}
