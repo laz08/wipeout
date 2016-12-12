@@ -5,6 +5,7 @@ public enum VehicleType
 
 	Kirby,
 	Corvette,
+	JusticeBoat,
 }
 
 
