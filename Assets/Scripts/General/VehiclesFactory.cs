@@ -34,6 +34,7 @@ public class VehiclesFactory : MonoBehaviour {
 
 				selectedVehicle = VehicleType.JusticeBoat;
 			} else {
+				
 				selectedVehicle = VehicleType.Kirby;
 			}
 
@@ -81,9 +82,12 @@ public class VehiclesFactory : MonoBehaviour {
 				//Get random vehicle type.
 				float randValue = Random.value;
 
-				if (randValue < 0.5f) {
+				if (randValue < 0.3f) {
 
 					type = VehicleType.Kirby;
+				} else if(randValue >= 0.3f && randValue < 0.6f){
+
+					type = VehicleType.JusticeBoat;
 				} else {
 
 					type = VehicleType.Corvette;
@@ -110,6 +114,10 @@ public class VehiclesFactory : MonoBehaviour {
 				obj = (GameObject)Instantiate (Resources.Load("Corvette"));
 			break;
 
+		case VehicleType.JusticeBoat:
+
+			obj = (GameObject)Instantiate (Resources.Load ("JusticeBoat"));
+			break;
 			default:
 			case VehicleType.Kirby:
 
