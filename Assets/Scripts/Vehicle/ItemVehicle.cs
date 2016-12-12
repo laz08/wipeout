@@ -13,6 +13,10 @@ public class ItemVehicle : MonoBehaviour {
 	public GameObject bomb;
 	public GameObject shield;
 
+	private Texture projectileText;
+	private Texture bombText;
+	private Texture shieldText;
+
 	public bool isPlayer = true;
 
 	public float turboTime = 1.0f;
@@ -29,11 +33,39 @@ public class ItemVehicle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		projectileText = (Texture)Resources.Load ("missileObj");
+		bombText = (Texture)Resources.Load ("bombObj");
+		shieldText = (Texture)Resources.Load ("shieldObj");
+
         actualItem = Items.NONE;
 		boxSelf = GetComponent<BoxCollider>().size;
 		boxProjectile = projectile.GetComponent<BoxCollider> ().size;
 	}
-	
+
+	void OnGUI() { //Show actual item
+		if (!isPlayer)
+			return;
+		
+		const int textXpos = 40; const int textYpos = 65;
+		const int textXsize = 80; const int textYsize = 80;
+
+		switch (actualItem) {
+		case Items.PROJECTILE:
+			GUI.DrawTexture(new Rect(textXpos, textYpos, textXsize, textYsize), projectileText, ScaleMode.StretchToFill, true, 10.0F);
+			break;
+		case Items.BOMB:
+			GUI.DrawTexture(new Rect(textXpos, textYpos, textXsize, textYsize), bombText, ScaleMode.StretchToFill, true, 10.0F);
+			break;
+		case Items.SHIELD:
+			GUI.DrawTexture(new Rect(textXpos, textYpos, textXsize, textYsize), shieldText, ScaleMode.StretchToFill, true, 10.0F);
+			break;
+		default:
+			break;
+		}
+
+
+	}
+
 	// Update is called once per frame
 	void Update () {
 
@@ -75,7 +107,6 @@ public class ItemVehicle : MonoBehaviour {
 		if (turboActivate) {
 			if (turboCountDown <= 0.0f) {
 				turboActivate = false;
-				itemActivatedEffect ();//Set to NONE
 			} else {
 				turboCountDown -= Time.deltaTime;
 				transform.Translate (0.0f,0.0f,turboSpeed*Time.deltaTime,Space.Self);
@@ -115,7 +146,7 @@ public class ItemVehicle : MonoBehaviour {
 			shieldDestroyed = false;
 		}
 		actualItem = Items.NONE;
-		itemActivatedEffect();//Set to NONE
+		if (isPlayer) itemActivatedEffect();//Set to NONE
 	}
 
     void OnCollisionEnter(Collision collision) {
@@ -135,7 +166,7 @@ public class ItemVehicle : MonoBehaviour {
 			case 3:
 				actualItem = Items.SHIELD;
 				break;
-			default:
+			default: 
 				break;
 			}
 
@@ -147,22 +178,7 @@ public class ItemVehicle : MonoBehaviour {
 
 	//show actual item (actived) TODO
 	void itemActivatedEffect() {
-		switch (actualItem) {
-		case Items.NONE:
 
-			break;
-		case Items.TURBO:
-
-			break;
-		case Items.PROJECTILE:
-
-			break;
-		case Items.BOMB:
-
-			break;
-		default:
-			break;
-		}
 	}
 
 }

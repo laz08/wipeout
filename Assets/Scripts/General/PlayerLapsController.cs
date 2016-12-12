@@ -6,7 +6,6 @@ public class PlayerLapsController : MonoBehaviour {
 
 	public Text lapsText;
 	public Text positionText;
-	public RawImage itemImage;
 
 	public int maxLaps = 3;
 	private float positionWaitTime = 0.15f;
@@ -34,19 +33,19 @@ public class PlayerLapsController : MonoBehaviour {
 			switch (pos) {
 			case 1:
 				positionText.color = Color.yellow;
-				position += " st";
+				position += "st";
 				break;
 			case 2:
 				positionText.color = Color.green;
-				position += " nd";
+				position += "nd";
 				break;
 			case 3:
 				positionText.color = Color.cyan;
-				position += " nd";
+				position += "nd";
 				break;
 			default:
 				positionText.color = Color.red;
-				position += " th";
+				position += "th";
 				break;
 			}
 			positionText.text = position;

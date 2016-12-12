@@ -52,7 +52,6 @@ public class VehicleForces : MonoBehaviour {
 			//vehicleRigidBody.AddForce (appliedHoverForce, ForceMode.Acceleration);
 			//Change gravity direction
 			gravityDir = hit.normal;
-			//Still need to improve this gravity change
 			//Physics.gravity = hit.normal*gravity; //THIS CHANGES THE PYSHICS OF ALL THE SCENE!!!!
 			//vehicleRigidBody.AddForce(hit.normal*gravity);
 		}
@@ -84,7 +83,7 @@ public class VehicleForces : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision) {
-		if (collision.gameObject.tag == "DamageItem" || collision.gameObject.tag == "Vehicle") { //Vehicle gets damaged
+		if (collision.gameObject.tag == "DamageItem" || collision.gameObject.tag == "Vehicle") { //Vehicle gets damaged, this may not be necessary
 			vehicleRigidBody.angularVelocity = prevAngularVel;
 			vehicleRigidBody.velocity = prevVel;
 		}
