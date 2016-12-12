@@ -19,6 +19,8 @@ public class MoveVehicle : MonoBehaviour {
 	private float speedZ = 0.0f;
 	private int lapsDone = 0;
 	private int currentWayPoint;
+	public float actualPosition = 0.0f; //Position "score" depending on the waypoints and laps
+	public int position = 0;//Position of the vehicle (first,second,..)
 
 	private float timeDamaged = 3.0f;//Time damage animation takes
 	public float timeDamagedCountdown = 0.0f;
@@ -33,6 +35,9 @@ public class MoveVehicle : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+		if (isPlayerVehicle)
+			Debug.Log (position);
 
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
 		
@@ -61,9 +66,6 @@ public class MoveVehicle : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "DamageItem") { //Vehicle gets damaged
 			timeDamagedCountdown = timeDamaged;
-		}
-		if (collision.gameObject.tag == "Vehicle") {
-			//Ignore
 		}
 	}
 
@@ -115,13 +117,15 @@ public class MoveVehicle : MonoBehaviour {
 
 		int closestWaypoint = mWaypointsFactory.getCurrentWaypointIndex (gameObject.transform.position);
 		if (closestWaypoint == 0 && currentWayPoint != 0) {
-
+			actualPosition += 10000.0f;
 			++lapsDone;
 			if (isPlayerVehicle) {
 
 				lapsController.setLapsDone (lapsDone);
 			}
 		}
+		if (currentWayPoint != closestWaypoint)
+			actualPosition += 1.0f;
 		currentWayPoint = closestWaypoint;
 	}
 
@@ -220,7 +224,7 @@ public class MoveVehicle : MonoBehaviour {
 			if (mWaypointsFactory as CreateFirstTrackWaypoints) 
 				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 20);
 			else if (mWaypointsFactory as CreateSecondTRackWayPoints)
-				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime*10);
+				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 10);
 
 
 			//transform.rotation = aux.rotation;

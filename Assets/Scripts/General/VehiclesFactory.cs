@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class VehiclesFactory : MonoBehaviour {
 
@@ -9,11 +11,26 @@ public class VehiclesFactory : MonoBehaviour {
 	public int opponents = 0;
 	public bool isTorusTrack = false;
 
-	void Awake(){
+	//private GameObject[] vehiclesList;
+	private List<GameObject> vehiclesList;
 
+	void Awake(){
+		vehiclesList = new List<GameObject>();
 		instantiateAllVehicles (0);
 	}
-		
+
+	void Update() {
+		//Sort from smaller to bigger
+		vehiclesList.Sort(delegate(GameObject a, GameObject b) {
+			return (a.GetComponent<MoveVehicle>().actualPosition).CompareTo(b.GetComponent<MoveVehicle>().actualPosition);
+		});
+
+		//Set position
+		for (int i = 0; i < vehiclesList.Count; ++i) {
+			vehiclesList [i].GetComponent<MoveVehicle> ().position = vehiclesList.Count - i;
+		}
+	}
+
 	private  void instantiateAllVehicles(int playerPosition){
 
 		float offsetZAxis = -15.0f;
@@ -51,6 +68,8 @@ public class VehiclesFactory : MonoBehaviour {
 
 			instantiateVehicle (type, isPlayer, new Vector3 (offsetXAxis, 0, i * offsetZAxis));
 		}
+
+		eliminateVehiclesCollision ();
 	}
 
 	private void instantiateVehicle(VehicleType type, bool isPlayer, Vector3 offset){
@@ -106,7 +125,16 @@ public class VehiclesFactory : MonoBehaviour {
 			mainCamera.GetComponent<CenterCameraOnVehicle> ().mUserVehicle = obj;
 			mainCamera.GetComponent<CenterCameraOnVehicle> ().isSecondTrack = isTorusTrack; 
 		}
+
+		vehiclesList.Add (obj);
 	}
 
+	void eliminateVehiclesCollision () {
+		for (int i = 0; i < vehiclesList.Count;++i) {
+			for (int j = i + 1; j < vehiclesList.Count; ++j) {
+				Physics.IgnoreCollision (vehiclesList [i].GetComponent<BoxCollider> (), vehiclesList [j].GetComponent<BoxCollider> ());
+			}
+		}
 
+	}
 }
