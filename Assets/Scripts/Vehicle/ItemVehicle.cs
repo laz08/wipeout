@@ -24,7 +24,7 @@ public class ItemVehicle : MonoBehaviour {
 	private float turboCountDown = 0.0f;
 	private bool turboActivate = false;
 
-	private float shieldTime = 6.0f;
+	public float shieldTime = 6.0f;
 	public float shieldCountDown = 0.0f;
 	private bool shieldDestroyed = true;
 	GameObject shieldInstance;
@@ -152,7 +152,6 @@ public class ItemVehicle : MonoBehaviour {
     void OnCollisionEnter(Collision collision) {
         if (actualItem == Items.NONE && collision.gameObject.tag == "PowerUpItem") {
 			int item = Random.Range (1, 4);
-			Debug.Log ("random number: " + item);
 			switch (item) {
 			case 0:
 				actualItem = Items.TURBO;

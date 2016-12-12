@@ -7,7 +7,7 @@ public class VehiclesFactory : MonoBehaviour {
 
 	public BaseCreateTrackWaypoints wayPointFactory;
 	public PlayerLapsController sceneLapsController;
-	public VehicleType selectedVehicle = VehicleType.Kirby;
+	public VehicleType selectedVehicle;// = VehicleType.Kirby;
 	public int opponents = 0;
 	public bool isTorusTrack = false;
 
@@ -134,7 +134,7 @@ public class VehiclesFactory : MonoBehaviour {
 
 		if (isTorusTrack) { //Special track done by someone special
 			//Change some values in order to have better gameplay at this track
-			obj.GetComponent<MoveVehicle> ().xAxisSpeed *= 10;
+			obj.GetComponent<MoveVehicle> ().xAxisSpeed *= 7;
 			obj.GetComponent<MoveVehicle> ().accZ *= 2;
 			obj.GetComponent<MoveVehicle> ().maxSpeedForward *= 2;
 
@@ -142,7 +142,7 @@ public class VehiclesFactory : MonoBehaviour {
 
 			obj.GetComponent<VehicleForces> ().addForceAsVelocity = false;
 
-			obj.GetComponent<ItemVehicle> ().turboSpeed = 150.0f;
+			obj.GetComponent<ItemVehicle> ().turboSpeed *= 2;
 
 		} else  {
 			obj.GetComponent<Rigidbody> ().useGravity = true;
