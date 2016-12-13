@@ -21,7 +21,7 @@ public class ItemBehaviour : MonoBehaviour {
 			countdownToRespawn = 0.0f;
 			gameObject.GetComponent<Collider>().enabled = true;
 		}
-		transform.Rotate(0.0f, 50*Time.deltaTime, 0.0f);
+		transform.Rotate(0.0f, 60*Time.deltaTime, 0.0f);
 	}
 
 	void OnCollisionEnter(Collision collision){
