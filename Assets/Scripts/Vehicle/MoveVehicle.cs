@@ -20,7 +20,7 @@ public class MoveVehicle : MonoBehaviour {
 
 	private float speedZ = 0.0f;
 	public int lapsDone = 0;
-	private int currentWayPoint;
+	public int currentWayPoint;
 	public float actualPosition = 0.0f; //Position "score" depending on the waypoints and laps
 	public int position = 0;//Position of the vehicle (first,second,..)
 

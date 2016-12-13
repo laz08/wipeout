@@ -56,7 +56,7 @@ public class CatmullRomSpline : MonoBehaviour
 
 		//The spline's resolution
 		//Make sure it's is adding up to 1, so 0.3 will give a gap, but 0.2 will work
-		float resolution = 0.1f;
+		float resolution = 0.05f;
 
 		//How many times should we loop?
 		int loops = Mathf.FloorToInt(1f / resolution);

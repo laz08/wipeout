@@ -155,9 +155,10 @@ public class VehiclesFactory : MonoBehaviour {
 		if (isPlayer) {
 		
 			GameObject mainCamera = GameObject.Find ("Main Camera");
-			mainCamera.transform.parent = obj.transform;
+			//mainCamera.transform.parent = obj.transform;
 			mainCamera.GetComponent<CenterCameraOnVehicle> ().mUserVehicle = obj;
 			mainCamera.GetComponent<CenterCameraOnVehicle> ().isSecondTrack = isTorusTrack; 
+			mainCamera.GetComponent<CenterCameraOnVehicle> ().mWaypointsFactory = wayPointFactory;
 		}
 
 		vehiclesList.Add (obj);

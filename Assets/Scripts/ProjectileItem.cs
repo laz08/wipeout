@@ -4,7 +4,7 @@ using System.Collections;
 public class ProjectileItem : MonoBehaviour {
 
 	public ParticleSystem explosion;
-	private float speed = 100.0f;
+	private float speed = 200.0f;
 
 	private GameObject vehicle;//Vehicle that has thrown this missile
 

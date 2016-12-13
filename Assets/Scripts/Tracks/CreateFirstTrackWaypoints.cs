@@ -89,7 +89,7 @@ public class CreateFirstTrackWaypoints : BaseCreateTrackWaypoints {
 				new Vector3 (-31.01677f, -15.50537f, -1.868788f),
 				new Vector3 (-6.904592f, -14.85552f, 1.75062f)
 			};
-
+		applyInterpolation = true;
 		if (applyInterpolation) {
 			
 			//mWayPoints = BezierInterpolator.MakeSmoothCurve (hardcodedWaypoints, mSmoothnessInterpolation);
