@@ -58,10 +58,10 @@ public class VehicleForces : MonoBehaviour {
 
 		if (addForceAsVelocity) { //First track
 			//Check not to go away the track
-			Ray rayUpR = new Ray (transform.position + new Vector3 (boxC.size.x * (3 / 2), 0.0f, boxC.size.z), -transform.up);
-			Ray rayUpL = new Ray (transform.position + new Vector3 (-boxC.size.x * (3 / 2), 0.0f, boxC.size.z), -transform.up);
-			Ray rayDownR = new Ray (transform.position + new Vector3 (boxC.size.x * (3 / 2), 0.0f, -boxC.size.z), -transform.up);
-			Ray rayDownL = new Ray (transform.position + new Vector3 (-boxC.size.x * (3 / 2), 0.0f, -boxC.size.z), -transform.up);
+			Ray rayUpR = new Ray (transform.position + new Vector3 (boxC.size.x * (3 / 2), 0.0f, boxC.size.z* (3 / 2)), -transform.up);
+			Ray rayUpL = new Ray (transform.position + new Vector3 (-boxC.size.x * (3 / 2), 0.0f, boxC.size.z* (3 / 2)), -transform.up);
+			Ray rayDownR = new Ray (transform.position + new Vector3 (boxC.size.x * (3 / 2), 0.0f, -boxC.size.z* (3 / 2)), -transform.up);
+			Ray rayDownL = new Ray (transform.position + new Vector3 (-boxC.size.x * (3 / 2), 0.0f, -boxC.size.z* (3 / 2)), -transform.up);
 			RaycastHit hitUR, hitUL, hitDR, hitDL;
 
 			if (!Physics.Raycast (rayUpR, out hitUR) || !Physics.Raycast (rayUpL, out hitUL) || !Physics.Raycast (rayDownR, out hitDR) || !Physics.Raycast (rayDownL, out hitDL)) {

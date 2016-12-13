@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class MoveVehicle : MonoBehaviour {
 
@@ -25,6 +27,8 @@ public class MoveVehicle : MonoBehaviour {
 	private float timeDamaged = 3.0f;//Time damage animation takes
 	public float timeDamagedCountdown = 0.0f;
 
+	private static string RESULT_SCENE = "ResultScene";
+
     void Start()
     {
 		applyDirToVehicle ();
@@ -35,6 +39,7 @@ public class MoveVehicle : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
 
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
 		
@@ -103,8 +108,8 @@ public class MoveVehicle : MonoBehaviour {
 
 
 		if (mWaypointsFactory as CreateFirstTrackWaypoints) {
-			//transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime*25);
-			transform.rotation = Quaternion.LookRotation(newForward);
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (newForward), Time.deltaTime*20);
+			//transform.rotation = Quaternion.LookRotation(newForward);
 
 		}
 		else if(mWaypointsFactory as CreateSecondTRackWayPoints) {
@@ -121,6 +126,13 @@ public class MoveVehicle : MonoBehaviour {
 			if (isPlayerVehicle) {
 
 				lapsController.setLapsDone (lapsDone);
+
+				if (lapsDone == /*lapsController.maxLaps+*/ 1) {
+					//ADD sleep??
+					Dictionary<string,string> arguments = new Dictionary<string,string>();
+					arguments.Add ("position", position.ToString());
+					AssemblyCSharp.SceneController.Load (RESULT_SCENE,arguments);
+				}
 			}
 		}
 		if (currentWayPoint != closestWaypoint)
