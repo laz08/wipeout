@@ -16,7 +16,7 @@ public class ProjectileItem : MonoBehaviour {
 
 		Ray ray = new Ray(transform.position, transform.forward);
 		RaycastHit hit;
-		if (Physics.Raycast (ray, out hit,4.0f) && hit.collider.tag != "PowerUpItem" && hit.collider.tag != "VelocityZone") {
+		if (Physics.Raycast (ray, out hit,(vSpeed*2+ speed)*Time.deltaTime) && hit.collider.tag != "PowerUpItem") {
 			autoDestroy ();
 		}
 	}
