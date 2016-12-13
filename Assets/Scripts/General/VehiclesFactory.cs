@@ -42,7 +42,7 @@ public class VehiclesFactory : MonoBehaviour {
 				GameObject[] powerups = GameObject.FindGameObjectsWithTag("PowerUpItem");
 				foreach (GameObject p in powerups) {
 					p.transform.localScale = new Vector3 (100.0f, 100.0f, 100.0f);
-					p.transform.Translate (new Vector3 (0.0f, 2.0f, 0.0f));
+					p.transform.Translate (new Vector3 (0.0f, 3.5f, 0.0f));
 				}
 			}
 
@@ -66,16 +66,22 @@ public class VehiclesFactory : MonoBehaviour {
 
 	private  void instantiateAllVehicles(int playerPosition){
 
-		float offsetZAxis = -15.0f;
+		float offsetZAxis = -25.0f;
+		float torusFaces = 9.0f;
+		float radiusTorus = 50.0f;
+		float offsetXAxis = 10.0f;
+
+		float offsetZAxisNormal = 7.0f;
+		float offsetXaxisNormal = -20.0f;
+		float extraZoffset = -5.0f;
 		for (int i = 0; i < opponents + 1; i++) { //+1 Because we're placing our fav. vehicle here. That is, the player :) 
 
 			bool isPlayer;
 			VehicleType type;
 
-			float offsetXAxis = 10.0f;
 			if (i % 2 == 0) {
 				//Offset on left
-				offsetXAxis = -offsetXAxis;
+				offsetZAxisNormal = -offsetZAxisNormal;
 			} 
 
 
@@ -101,9 +107,13 @@ public class VehiclesFactory : MonoBehaviour {
 					type = VehicleType.Corvette;
 				}
 			}
-
-			//TODO: put different initial position on the second track!
-			instantiateVehicle (type, isPlayer, new Vector3 (offsetXAxis, 0, i * offsetZAxis));
+			if (!isTorusTrack)
+				instantiateVehicle (type, isPlayer, new Vector3 ((i+1) *offsetXaxisNormal, 0,  offsetZAxisNormal+extraZoffset));
+			else {
+				float angle = (i % torusFaces) * ((2*Mathf.PI)/torusFaces);
+				instantiateVehicle (type, isPlayer, 
+					new Vector3 (radiusTorus*Mathf.Cos(angle) + Mathf.Abs(offsetXAxis), radiusTorus*Mathf.Sin(angle), (i/torusFaces+1) * offsetZAxis));
+			}
 		}
 
 		eliminateVehiclesCollision ();

@@ -19,6 +19,9 @@ public class MoveVehicle : MonoBehaviour {
 	public Vector3 offsetStartPosition = new Vector3 (0, 0, 0);
 
 	private float speedZ = 0.0f;
+
+	private float lapsCountDown = 0.0f;//In order to control laps countdown
+	private float lapTime = 20.0f;//Minimum seconds to complete a lap?
 	public int lapsDone = 0;
 	public int currentWayPoint;
 	public float actualPosition = 0.0f; //Position "score" depending on the waypoints and laps
@@ -36,9 +39,9 @@ public class MoveVehicle : MonoBehaviour {
     void Start()
     {
 		applyDirToVehicle ();
-		currentWayPoint = 0;
-		transform.position = mWaypointsFactory.getWaypoint (1)
-			+ transform.TransformDirection (offsetStartPosition);
+		currentWayPoint = -1;
+		transform.position = mWaypointsFactory.getWaypoint (0)
+			+ /*transform.TransformDirection */(offsetStartPosition); //WHY TRANSFORM???
 		if (isPlayerVehicle) { //Load win/loose textures
 			winText = (Texture)Resources.Load ("missileObj");
 			looseText = (Texture)Resources.Load ("shieldObj");
@@ -47,7 +50,8 @@ public class MoveVehicle : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		if (lapsCountDown > 0)
+			lapsCountDown -= Time.deltaTime;
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
 		
 			timeDamagedCountdown -= Time.deltaTime;
@@ -128,13 +132,14 @@ public class MoveVehicle : MonoBehaviour {
 	private void checkHasLapBeenDone(){
 
 		int closestWaypoint = mWaypointsFactory.getCurrentWaypointIndex (gameObject.transform.position);
-		if (closestWaypoint == 0 && currentWayPoint != 0) {
+		if (closestWaypoint == 0 && currentWayPoint != 0 && lapsCountDown <= 0.0f) {
+			lapsCountDown = lapTime;
 			++lapsDone;
 			if (isPlayerVehicle) {
 
 				lapsController.setLapsDone (lapsDone);
 
-				if (lapsDone == /*lapsController.maxLaps+*/ 1) {
+				if (lapsDone == /*lapsController.maxLaps+ 1*/2) {
 					isEnd = true;
 					isPlayerVehicle = false; //Let the IA controll the vehicle once ended
 					//ADD sleep??

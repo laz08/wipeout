@@ -18,7 +18,7 @@ public class PlayerLapsController : MonoBehaviour {
 
 	private string getLapsText(int currentLap){
 	
-		return currentLap + "/" + maxLaps;
+		return Mathf.Max(1,Mathf.Min(currentLap,maxLaps)) + "/" + maxLaps;
 	}
 
 	public void setLapsDone(int lapsDone){

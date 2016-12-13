@@ -25,7 +25,7 @@ public class VehicleSelectController : MonoBehaviour {
 	void Awake() {
 	 	//get here map parameter 
 		//string paramTrack = AssemblyCSharp.SceneController.getParam (SELECTED_TRACK_KEY);
-		selected_Track = SECOND_TRACK_NAME;
+		selected_Track = FIRST_TRACK_NAME;
 	 }
 
 	void Update(){

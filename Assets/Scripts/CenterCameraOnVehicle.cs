@@ -35,8 +35,8 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 			//prevPoint += camToUser * camToUserOffset;
 			//nextPoint += camToUser * camToUserOffset;
 		} else {
-			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*3) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
-			nextPoint +=/*  mWaypointsFactory.getWaypoint (wayPointV + wayPointsOffset*2) +*/ new Vector3 (0.0f, 10.0f, 0.0f);
+			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*7) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
+			nextPoint =  mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*3) + new Vector3 (0.0f, 10.0f, 0.0f);
 		}
 
 		transform.position = prevPoint;
@@ -58,7 +58,7 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 				speed /= 3.0f;
 		} else {
 			speed *= 2.2f;
-			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*2) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
+			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*3) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
 		}
 
 		//Change camera parameters

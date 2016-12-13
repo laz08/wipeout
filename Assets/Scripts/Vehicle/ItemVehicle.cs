@@ -164,7 +164,7 @@ public class ItemVehicle : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (actualItem == Items.NONE && collision.gameObject.tag == "PowerUpItem") {
-			int item = Random.Range (1, 4);
+			int item = Random.Range (0, 4);
 			switch (item) {
 			case 0:
 				actualItem = Items.TURBO;
