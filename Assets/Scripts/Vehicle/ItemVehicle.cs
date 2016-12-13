@@ -16,6 +16,7 @@ public class ItemVehicle : MonoBehaviour {
 	private Texture projectileText;
 	private Texture bombText;
 	private Texture shieldText;
+	private Texture turboText;
 
 	public bool isPlayer = true;
 
@@ -36,6 +37,7 @@ public class ItemVehicle : MonoBehaviour {
 		projectileText = (Texture)Resources.Load ("missileObj");
 		bombText = (Texture)Resources.Load ("bombObj");
 		shieldText = (Texture)Resources.Load ("shieldObj");
+		turboText = (Texture)Resources.Load ("turboObj");
 
         actualItem = Items.NONE;
 		boxSelf = GetComponent<BoxCollider>().size;
@@ -50,6 +52,9 @@ public class ItemVehicle : MonoBehaviour {
 		const int textXsize = 80; const int textYsize = 80;
 
 		switch (actualItem) {
+		case Items.TURBO:
+			GUI.DrawTexture(new Rect(textXpos, textYpos, textXsize, textYsize), turboText, ScaleMode.StretchToFill, true, 10.0F);
+			break;
 		case Items.PROJECTILE:
 			GUI.DrawTexture(new Rect(textXpos, textYpos, textXsize, textYsize), projectileText, ScaleMode.StretchToFill, true, 10.0F);
 			break;
@@ -125,12 +130,20 @@ public class ItemVehicle : MonoBehaviour {
 			offset = transform.TransformVector (offset);
 			GameObject misil = (GameObject)Instantiate(projectile,transform.position + offset,transform.rotation);
 			misil.GetComponent<ProjectileItem>().setVehicle (gameObject);
+			//Increase missil size on second track
+			if (GetComponent<MoveVehicle> ().mWaypointsFactory as CreateSecondTRackWayPoints) {
+				misil.transform.localScale = new Vector3 (10.0f, 10.0f, 10.0f);
+			}
 			Physics.IgnoreCollision (misil.GetComponent<BoxCollider> (), GetComponent<BoxCollider> ());
 		}
 		if (actualItem == Items.BOMB) {
 			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z/2 + boxProjectile.z);
 			offset = transform.TransformVector (offset);
-			Instantiate(bomb,transform.position - offset,transform.rotation);
+			GameObject b = (GameObject)Instantiate(bomb,transform.position - offset,transform.rotation);
+			//Increase bomb size on second track
+			if (GetComponent<MoveVehicle> ().mWaypointsFactory as CreateSecondTRackWayPoints) {
+				b.transform.localScale = new Vector3 (40.0f, 40.0f, 40.0f);
+			}
 		}
 		if (actualItem == Items.SHIELD) {
 			if (!shieldDestroyed)

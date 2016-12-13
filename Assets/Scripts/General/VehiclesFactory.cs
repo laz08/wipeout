@@ -37,6 +37,14 @@ public class VehiclesFactory : MonoBehaviour {
 				
 				selectedVehicle = VehicleType.Kirby;
 			}
+			if (isTorusTrack) {
+				//Scale all powerupd for torus track(in order to not go one by one ...)
+				GameObject[] powerups = GameObject.FindGameObjectsWithTag("PowerUpItem");
+				foreach (GameObject p in powerups) {
+					p.transform.localScale = new Vector3 (100.0f, 100.0f, 100.0f);
+					p.transform.Translate (new Vector3 (0.0f, 2.0f, 0.0f));
+				}
+			}
 
 		} 
 

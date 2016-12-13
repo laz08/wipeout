@@ -31,11 +31,11 @@ public class CreateSecondTRackWayPoints : BaseCreateTrackWaypoints {
 
 		float centerOffsetZ = 1250.0f;
 		float centerOffsetY = -50.0f;
-		Vector3 center = new Vector3 (0,-centerOffsetY,-centerOffsetZ);
+		Vector3 center = new Vector3 (0,-centerOffsetY,-centerOffsetZ);//Center of torus
 		float radius = 3330.0f;
-		int numberOfPoints = 500;
+		int numberOfPoints = 1000;
 		float deltaAlpha = (2 * Mathf.PI) / numberOfPoints;
-		float alphaOffset = 1.2f;
+		float alphaOffset = 1.2f;//Where the race starts
 
 		Vector3[] hardcodedWaypoints = new Vector3[numberOfPoints];
 		for (int i = 0; i < numberOfPoints; ++i) {
