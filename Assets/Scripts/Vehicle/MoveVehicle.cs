@@ -27,7 +27,11 @@ public class MoveVehicle : MonoBehaviour {
 	private float timeDamaged = 3.0f;//Time damage animation takes
 	public float timeDamagedCountdown = 0.0f;
 
-	private static string RESULT_SCENE = "ResultScene";
+	//Race end 
+	private bool isEnd = false;
+	private Texture winText;
+	private Texture looseText;
+	private bool ending = false;
 
     void Start()
     {
@@ -35,11 +39,14 @@ public class MoveVehicle : MonoBehaviour {
 		currentWayPoint = 0;
 		transform.position = mWaypointsFactory.getWaypoint (1)
 			+ transform.TransformDirection (offsetStartPosition);
+		if (isPlayerVehicle) { //Load win/loose textures
+			winText = (Texture)Resources.Load ("missileObj");
+			looseText = (Texture)Resources.Load ("shieldObj");
+		}
     }
 
 	// Update is called once per frame
 	void Update () {
-
 
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
 		
@@ -128,10 +135,12 @@ public class MoveVehicle : MonoBehaviour {
 				lapsController.setLapsDone (lapsDone);
 
 				if (lapsDone == /*lapsController.maxLaps+*/ 1) {
+					isEnd = true;
+					isPlayerVehicle = false; //Let the IA controll the vehicle once ended
 					//ADD sleep??
-					Dictionary<string,string> arguments = new Dictionary<string,string>();
+					/*Dictionary<string,string> arguments = new Dictionary<string,string>();
 					arguments.Add ("position", position.ToString());
-					AssemblyCSharp.SceneController.Load (RESULT_SCENE,arguments);
+					AssemblyCSharp.SceneController.Load (RESULT_SCENE,arguments);*/
 				}
 			}
 		}
@@ -214,15 +223,6 @@ public class MoveVehicle : MonoBehaviour {
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit)) {
-            /*Vector3 angleIncr = hit.normal - transform.up;
-            //Vector3.Angle(hit.normal,transform.up)
-            Debug.Log(hit.normal);
-            transform.up = Vector3.Lerp(transform.up,hit.normal,Time.deltaTime*5.0f);
-            */
-
-
-            //http://answers.unity3d.com/questions/351899/rotation-lerp.html
-
 
 			//Create new object in order to have a new transform to handle rotation as quaternions
 			GameObject tempGameObject = new GameObject();
@@ -237,13 +237,8 @@ public class MoveVehicle : MonoBehaviour {
 			else if (mWaypointsFactory as CreateSecondTRackWayPoints)
 				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 10);
 
-
-			//transform.rotation = aux.rotation;
 			Destroy (tempGameObject);
 
-            //http://answers.unity3d.com/questions/1192454/bug-transformup-transformup-sets-y-rotation-to-0.html
-            //transform.rotation = Quaternion.LookRotation(hit.normal, -transform.forward);
-            //transform.Rotate(Vector3.right, 90f);
         }
     }
 
@@ -251,4 +246,42 @@ public class MoveVehicle : MonoBehaviour {
 		return speedZ;
 	}
 
+	void OnGUI() {
+		if (isEnd) {
+			if (!ending) {
+				ending = true;
+				//stop all sounds
+				AudioSource[] audios = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+				foreach (AudioSource aud in audios)
+					aud.Stop ();
+
+				AudioSource audio = gameObject.AddComponent < AudioSource > ();
+				//Winner/looser sound
+				if (position ==1) 
+					audio.PlayOneShot ((AudioClip)Resources.Load ("fanfare"));
+
+			}
+
+			if (Input.GetKey (KeyCode.Space)) {//Return to main menu
+				GUI.Label (new Rect (500, 100, 100, 100), "Loading . . .");
+				SceneManager.LoadScene ("GameMenu");
+			}
+
+			const int textXpos = 300;
+			const int textYpos = 300;
+			const int textXsize = 200;
+			const int textYsize = 200;
+
+			GUI.Label (new Rect (textXpos, textYpos, textXsize, textYsize), "Press space to return nto menu");
+			/*
+			switch (position) {
+			case 1:
+				GUI.DrawTexture (new Rect (textXpos, textYpos, textXsize, textYsize), winText, ScaleMode.StretchToFill, true, 10.0F);
+				break;
+			default :
+				GUI.DrawTexture (new Rect (textXpos, textYpos, textXsize, textYsize), looseText, ScaleMode.StretchToFill, true, 10.0F);
+				break;
+			}*/
+		}
+	}
 }

@@ -8,7 +8,7 @@ public class VehicleSelectController : MonoBehaviour {
 	public GameObject corvetteObj;
 	public GameObject boatObj;
 
-	private static string FIRST_TRACK_NAME = "TorusTrack";
+	private static string FIRST_TRACK_NAME = "FirstTrack";
 	private static string GAME_MENU_NAME = "GameMenu";
 
 	private static string SELECTED_VEHICLE_KEY = "selectedVehicle";

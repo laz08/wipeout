@@ -55,9 +55,9 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 			speed *= 2.2f;
 			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*2) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
 		}
-		transform.position = Vector3.Lerp (transform.position, prevPoint, speed);
-		//Vector3 nextPoint = mWaypointsFactory.getWaypoint (wayPointV + wayPointsOffset/2);
 
+		//Change camera parameters
+		transform.position = Vector3.Lerp (transform.position, prevPoint, speed);
 		transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.LookRotation (prevPoint - transform.position), speed);
 
 		/*
