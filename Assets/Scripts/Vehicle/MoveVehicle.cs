@@ -30,6 +30,8 @@ public class MoveVehicle : MonoBehaviour {
 	private float timeDamaged = 3.0f;//Time damage animation takes
 	public float timeDamagedCountdown = 0.0f;
 
+    //Race beggining
+
 	//Race end 
 	private bool isEnd = false;
 	private Texture winText;
