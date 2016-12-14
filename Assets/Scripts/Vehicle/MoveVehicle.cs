@@ -31,7 +31,7 @@ public class MoveVehicle : MonoBehaviour {
 	public float timeDamagedCountdown = 0.0f;
 
     //Race beggining
-    private float waitingStartTime = 4.0f;
+    public float waitingStartTime = 4.0f;
     private Texture countDown3;
     private Texture countDown2;
     private Texture countDown1;

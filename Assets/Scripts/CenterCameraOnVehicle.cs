@@ -21,14 +21,14 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 		Vector3 nextPoint = mWaypointsFactory.getWaypoint (wayPointV);
 
 		if (isSecondTrack) {
-			Vector3 camToUser = mUserVehicle.transform.position -  mWaypointsFactory.getWaypoint (wayPointV);
-            prevPoint = mWaypointsFactory.getWaypoint(wayPointV - wayPointsOffset * 2);
+			//Vector3 camToUser = mUserVehicle.transform.position -  mWaypointsFactory.getWaypoint (wayPointV);
+            prevPoint = mWaypointsFactory.getWaypoint(wayPointV - wayPointsOffset * 3);
 			//prevPoint += camToUser * camToUserOffset;
 			//nextPoint += camToUser * camToUserOffset;
-            nextPoint = mUserVehicle.transform.position;
+            //nextPoint = mUserVehicle.transform.position;
 		} else {
-			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*7) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
-			nextPoint =  mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*3) + new Vector3 (0.0f, 10.0f, 0.0f);
+			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*20) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
+			nextPoint =  mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*15) + new Vector3 (0.0f, 10.0f, 0.0f);
 		}
 
 		transform.position = prevPoint;
@@ -38,7 +38,9 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+
+        if (mUserVehicle.GetComponent<MoveVehicle>().waitingStartTime > 0.0f) return;
+
 		float speed = Mathf.Log10(mUserVehicle.GetComponent<MoveVehicle> ().getSpeed ())*Time.deltaTime;//Lerp speed
 		int wayPointV = mUserVehicle.GetComponent<MoveVehicle> ().currentWayPoint;
 		Vector3 prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset);
