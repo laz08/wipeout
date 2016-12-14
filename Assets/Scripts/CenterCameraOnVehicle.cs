@@ -47,13 +47,14 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 
 		if (isSecondTrack) {
 			Vector3 camToUser = mUserVehicle.transform.position - mWaypointsFactory.getWaypoint (wayPointV);
-			prevPoint += camToUser * camToUserOffset;
-			if (mUserVehicle.GetComponent<MoveVehicle> ().timeDamagedCountdown > 0.0f) //being damaged, slow speed
-				speed /= 3.0f;
+			prevPoint += camToUser * camToUserOffset;	
 		} else {
 			speed *= 2.2f;
 			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*3) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
 		}
+
+        if (mUserVehicle.GetComponent<MoveVehicle>().timeDamagedCountdown > 0.0f) //being damaged, slow speed
+            speed /= 3.0f;
 
 		//Change camera parameters
 		transform.position = Vector3.Lerp (transform.position, prevPoint, speed);

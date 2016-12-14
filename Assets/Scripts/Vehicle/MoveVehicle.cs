@@ -48,7 +48,7 @@ public class MoveVehicle : MonoBehaviour {
 		applyDirToVehicle ();
 		currentWayPoint = -1;
 		transform.position = mWaypointsFactory.getWaypoint (0)
-			+ /*transform.TransformDirection */(offsetStartPosition); //WHY TRANSFORM???
+			+ /*transform.TransformDirection */(offsetStartPosition); //WHY TRANSFORM??? 
 		if (isPlayerVehicle) { //Load textures
 			winText = (Texture)Resources.Load ("missileObj");
 			looseText = (Texture)Resources.Load ("shieldObj");
@@ -63,6 +63,8 @@ public class MoveVehicle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (waitingStartTime > 0) {
+            applyDirToVehicle();
+            changeUpDirection();
             waitingStartTime -= Time.deltaTime;
             return;
         }

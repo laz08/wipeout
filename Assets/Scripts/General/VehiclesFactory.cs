@@ -42,7 +42,7 @@ public class VehiclesFactory : MonoBehaviour {
 				GameObject[] powerups = GameObject.FindGameObjectsWithTag("PowerUpItem");
 				foreach (GameObject p in powerups) {
 					p.transform.localScale = new Vector3 (100.0f, 100.0f, 100.0f);
-					p.transform.Translate (new Vector3 (0.0f, 3.5f, 0.0f));
+					p.transform.Translate (new Vector3 (0.0f, 4.5f, 0.0f));
 				}
 			}
 
@@ -72,18 +72,17 @@ public class VehiclesFactory : MonoBehaviour {
 		float offsetXAxis = 10.0f;
 
         //not torus track paramaeters
-		float offsetZAxisNormal = 7.0f;
+		float offsetZAxisNormal = 10.0f;
 		float offsetXaxisNormal = -20.0f;
-		float extraZoffset = -6.0f;
 		for (int i = 0; i < opponents + 1; i++) { //+1 Because we're placing our fav. vehicle here. That is, the player :) 
 
 			bool isPlayer;
 			VehicleType type;
 
-			if (i % 2 == 0) {
+			//if (i % 2 == 0) {
 				//Offset on left
 				offsetZAxisNormal = -offsetZAxisNormal;
-			} 
+			//} 
 
 
 			if (i == playerPosition) {
@@ -108,9 +107,8 @@ public class VehiclesFactory : MonoBehaviour {
 					type = VehicleType.Corvette;
 				}
 			}
-            type = VehicleType.Kirby;
 			if (!isTorusTrack)
-				instantiateVehicle (type, isPlayer, new Vector3 ((i/2+1) *offsetXaxisNormal, 0,  offsetZAxisNormal+extraZoffset));
+				instantiateVehicle (type, isPlayer, new Vector3 ((i/2+1) *offsetXaxisNormal, 0,  offsetZAxisNormal));
 			else { // May need to rotate!!
 				float angle = (i % torusFaces) * ((2*Mathf.PI)/torusFaces);
 				instantiateVehicle (type, isPlayer, 
@@ -122,8 +120,8 @@ public class VehiclesFactory : MonoBehaviour {
 	}
 
 	private void instantiateVehicle(VehicleType type, bool isPlayer, Vector3 offset){
-	
 
+        Debug.Log(offset.z);
 		GameObject obj;
 		switch(type){
 

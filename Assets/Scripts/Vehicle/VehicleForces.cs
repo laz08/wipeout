@@ -26,7 +26,7 @@ public class VehicleForces : MonoBehaviour {
 
 	void FixedUpdate() {
 
-		prevAngularVel = vehicleRigidBody.angularVelocity;
+        prevAngularVel = vehicleRigidBody.angularVelocity;
 		prevVel = vehicleRigidBody.velocity;
 
 		//Add gravity force
@@ -35,7 +35,6 @@ public class VehicleForces : MonoBehaviour {
 			
 			//vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.VelocityChange);
 		} else {
-		
 			vehicleRigidBody.AddForce (gravityDir * gravity*Time.deltaTime, ForceMode.Acceleration);
 		}
 
