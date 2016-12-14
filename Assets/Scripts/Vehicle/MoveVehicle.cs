@@ -259,7 +259,7 @@ public class MoveVehicle : MonoBehaviour {
 			if (mWaypointsFactory as CreateFirstTrackWaypoints) 
 				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 20);
 			else if (mWaypointsFactory as CreateSecondTRackWayPoints)
-				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 10);
+				transform.rotation = Quaternion.Slerp (transform.rotation, aux.rotation, Time.deltaTime * 15);
 
 			Destroy (tempGameObject);
 

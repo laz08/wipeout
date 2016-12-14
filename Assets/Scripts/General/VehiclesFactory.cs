@@ -66,10 +66,10 @@ public class VehiclesFactory : MonoBehaviour {
 
 	private  void instantiateAllVehicles(int playerPosition){
 
-		float offsetZAxis = -25.0f;
-		float torusFaces = 9.0f;
-		float radiusTorus = 40.0f;
-		float offsetXAxis = 10.0f;
+		float offsetZAxis = -20.0f;
+		float torusFaces = 4.0f;
+		float radiusTorus = 70.0f;
+        float alphaOffset = Mathf.PI / 4;
 
         //not torus track paramaeters
 		float offsetZAxisNormal = 10.0f;
@@ -107,12 +107,14 @@ public class VehiclesFactory : MonoBehaviour {
 					type = VehicleType.Corvette;
 				}
 			}
-			if (!isTorusTrack)
+
+            if (!isTorusTrack)
 				instantiateVehicle (type, isPlayer, new Vector3 ((i/2+1) *offsetXaxisNormal, 0,  offsetZAxisNormal));
 			else { // May need to rotate!!
 				float angle = (i % torusFaces) * ((2*Mathf.PI)/torusFaces);
+                angle += alphaOffset * (i / torusFaces);
 				instantiateVehicle (type, isPlayer, 
-					new Vector3 (radiusTorus*Mathf.Cos(angle) + Mathf.Abs(offsetXAxis), radiusTorus*Mathf.Sin(angle), (i/torusFaces+1) * offsetZAxis));
+					new Vector3 (radiusTorus*Mathf.Cos(angle), radiusTorus*Mathf.Sin(angle), (i/torusFaces+1) * offsetZAxis));
 			}
 		}
 
@@ -121,7 +123,6 @@ public class VehiclesFactory : MonoBehaviour {
 
 	private void instantiateVehicle(VehicleType type, bool isPlayer, Vector3 offset){
 
-        Debug.Log(offset.z);
 		GameObject obj;
 		switch(type){
 
@@ -152,7 +153,7 @@ public class VehiclesFactory : MonoBehaviour {
 
 		if (isTorusTrack) { //Special track done by someone special
 			//Change some values in order to have better gameplay at this track
-			obj.GetComponent<MoveVehicle> ().xAxisSpeed *= 7;
+			obj.GetComponent<MoveVehicle> ().xAxisSpeed *= 6.5f;
 			obj.GetComponent<MoveVehicle> ().accZ *= 2;
 			obj.GetComponent<MoveVehicle> ().maxSpeedForward *= 2;
 
