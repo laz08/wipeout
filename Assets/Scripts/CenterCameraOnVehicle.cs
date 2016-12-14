@@ -15,25 +15,17 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		/*if (!isSecondTrack) {
-			mDefaultXOffset = 0.0f;
-			mOffsetY = 15.0f;
-			mOffsetZ = -35.0f;
-		} else {
-			mDefaultXOffset = 0.0f;
-			mOffsetY = 15.0f;
-			mOffsetZ = -45.0f;
-		}*/
-
 		//Initialize position and rotation
 		int wayPointV = mUserVehicle.GetComponent<MoveVehicle> ().currentWayPoint;
 		Vector3 prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset);
 		Vector3 nextPoint = mWaypointsFactory.getWaypoint (wayPointV);
 
 		if (isSecondTrack) {
-			//Vector3 camToUser = mUserVehicle.transform.position -  mWaypointsFactory.getWaypoint (wayPointV);
+			Vector3 camToUser = mUserVehicle.transform.position -  mWaypointsFactory.getWaypoint (wayPointV);
+            prevPoint = mWaypointsFactory.getWaypoint(wayPointV - wayPointsOffset * 2);
 			//prevPoint += camToUser * camToUserOffset;
 			//nextPoint += camToUser * camToUserOffset;
+            nextPoint = mUserVehicle.transform.position;
 		} else {
 			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*7) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
 			nextPoint =  mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*3) + new Vector3 (0.0f, 10.0f, 0.0f);
@@ -66,26 +58,6 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 		if (prevPoint -transform.position != new Vector3(0.0f,0.0f,0.0f)) {
 			transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.LookRotation (prevPoint - transform.position), speed);
 		}
-
-		/*
-		 * OLD
-		 * 
-		transform.position = mUserVehicle.transform.position;
-	
-		transform.localPosition = 
-			new Vector3 (
-				mDefaultXOffset, 
-				mOffsetY, 
-				mOffsetZ);
-		if (!isSecondTrack)
-			transform.LookAt (mUserVehicle.transform.position);
-		else {
-			Vector3 offsetLookAt = mUserVehicle.transform.InverseTransformVector (new Vector3 (0.0f, mOffsetY/1.8f,0.0f));
-			//transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.LookRotation(mUserVehicle.transform.position+offsetLookAt-transform.position),Time.deltaTime*15);
-			//transform.LookAt (mUserVehicle.transform.position +offsetLookAt);
-		}
-
-		*/
 
 	}
 }

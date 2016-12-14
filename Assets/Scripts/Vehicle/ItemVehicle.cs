@@ -96,6 +96,7 @@ public class ItemVehicle : MonoBehaviour {
 				shieldDestroyed = true;
 			} else {
 				shieldCountDown -= Time.deltaTime;
+                transform.Translate(0.0f, 0.0f, turboSpeed * Time.deltaTime/10.0f, Space.Self);//Add small turbo
 			}
 		}
 		//Check if the vehicle is in a velocity ramp

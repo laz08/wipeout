@@ -31,6 +31,11 @@ public class MoveVehicle : MonoBehaviour {
 	public float timeDamagedCountdown = 0.0f;
 
     //Race beggining
+    private float waitingStartTime = 4.0f;
+    private Texture countDown3;
+    private Texture countDown2;
+    private Texture countDown1;
+    private Texture countDownGo;
 
 	//Race end 
 	private bool isEnd = false;
@@ -44,14 +49,24 @@ public class MoveVehicle : MonoBehaviour {
 		currentWayPoint = -1;
 		transform.position = mWaypointsFactory.getWaypoint (0)
 			+ /*transform.TransformDirection */(offsetStartPosition); //WHY TRANSFORM???
-		if (isPlayerVehicle) { //Load win/loose textures
+		if (isPlayerVehicle) { //Load textures
 			winText = (Texture)Resources.Load ("missileObj");
 			looseText = (Texture)Resources.Load ("shieldObj");
+            countDown3 = (Texture)Resources.Load("shieldObj");
+            countDown2 = (Texture)Resources.Load("shieldObj");
+            countDown1 = (Texture)Resources.Load("shieldObj");
+            countDownGo = (Texture)Resources.Load("shieldObj");
+
 		}
     }
 
 	// Update is called once per frame
 	void Update () {
+        if (waitingStartTime > 0) {
+            waitingStartTime -= Time.deltaTime;
+            return;
+        }
+
 		if (lapsCountDown > 0)
 			lapsCountDown -= Time.deltaTime;
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
@@ -198,7 +213,7 @@ public class MoveVehicle : MonoBehaviour {
 
 			return 0;
 		}
-		if(shouldTurn > 0.64f && shouldTurn < 0.65f) {
+		if(shouldTurn > 0.60f && shouldTurn < 0.75f) {
 
 			return xAxisSpeed * Time.deltaTime;
 		}
@@ -254,6 +269,33 @@ public class MoveVehicle : MonoBehaviour {
 	}
 
 	void OnGUI() {
+        float Textwidth = 600;
+        float Textheight = 600;
+
+        //For race beggining
+        if (isPlayerVehicle && waitingStartTime > 0.0f) {
+            //Textures centered on screen
+            //Substitute labels per textures!
+            if (waitingStartTime >= 2.5f) {
+                GUI.Label (new Rect (500, 100, 1000, 1000), "3..");
+                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown3);
+            }
+            else if (waitingStartTime >= 1.5f) {
+                GUI.Label(new Rect(500, 100, 1000, 1000), "2..");
+                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown2);
+            }
+            else if (waitingStartTime >= 0.5f) {
+                GUI.Label(new Rect(500, 100, 1000, 1000), "1..");
+                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown1);
+            }
+            else {
+                GUI.Label (new Rect (500, 100, 1000, 1000), "GO");
+                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDownGo);
+            }
+        }
+
+
+        //For race ending
 		if (isEnd) {
 			if (!ending) {
 				ending = true;
@@ -278,17 +320,17 @@ public class MoveVehicle : MonoBehaviour {
 			const int textYpos = 300;
 			const int textXsize = 200;
 			const int textYsize = 200;
-
 			GUI.Label (new Rect (textXpos, textYpos, textXsize, textYsize), "Press space to return nto menu");
-			/*
-			switch (position) {
-			case 1:
-				GUI.DrawTexture (new Rect (textXpos, textYpos, textXsize, textYsize), winText, ScaleMode.StretchToFill, true, 10.0F);
-				break;
-			default :
-				GUI.DrawTexture (new Rect (textXpos, textYpos, textXsize, textYsize), looseText, ScaleMode.StretchToFill, true, 10.0F);
-				break;
-			}*/
-		}
+
+            /* //Substitute labels per textures!
+            switch (position) {
+            case 1:
+                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), winText);
+                break;
+            default :
+                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), looseText);
+                break;
+            }*/
+        }
 	}
 }

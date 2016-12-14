@@ -68,12 +68,13 @@ public class VehiclesFactory : MonoBehaviour {
 
 		float offsetZAxis = -25.0f;
 		float torusFaces = 9.0f;
-		float radiusTorus = 50.0f;
+		float radiusTorus = 40.0f;
 		float offsetXAxis = 10.0f;
 
+        //not torus track paramaeters
 		float offsetZAxisNormal = 7.0f;
 		float offsetXaxisNormal = -20.0f;
-		float extraZoffset = -5.0f;
+		float extraZoffset = -6.0f;
 		for (int i = 0; i < opponents + 1; i++) { //+1 Because we're placing our fav. vehicle here. That is, the player :) 
 
 			bool isPlayer;
@@ -107,9 +108,10 @@ public class VehiclesFactory : MonoBehaviour {
 					type = VehicleType.Corvette;
 				}
 			}
+            type = VehicleType.Kirby;
 			if (!isTorusTrack)
-				instantiateVehicle (type, isPlayer, new Vector3 ((i+1) *offsetXaxisNormal, 0,  offsetZAxisNormal+extraZoffset));
-			else {
+				instantiateVehicle (type, isPlayer, new Vector3 ((i/2+1) *offsetXaxisNormal, 0,  offsetZAxisNormal+extraZoffset));
+			else { // May need to rotate!!
 				float angle = (i % torusFaces) * ((2*Mathf.PI)/torusFaces);
 				instantiateVehicle (type, isPlayer, 
 					new Vector3 (radiusTorus*Mathf.Cos(angle) + Mathf.Abs(offsetXAxis), radiusTorus*Mathf.Sin(angle), (i/torusFaces+1) * offsetZAxis));
