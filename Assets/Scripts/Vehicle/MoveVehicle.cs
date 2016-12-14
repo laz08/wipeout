@@ -21,7 +21,7 @@ public class MoveVehicle : MonoBehaviour {
 	private float speedZ = 0.0f;
 
 	private float lapsCountDown = 0.0f;//In order to control laps countdown
-	private float lapTime = 20.0f;//Minimum seconds to complete a lap?
+	private float lapTime = 10.0f;//Minimum seconds to complete a lap?
 	public int lapsDone = 0;
 	public int currentWayPoint;
 	public float actualPosition = 0.0f; //Position "score" depending on the waypoints and laps
@@ -31,17 +31,19 @@ public class MoveVehicle : MonoBehaviour {
 	public float timeDamagedCountdown = 0.0f;
 
     //Race beggining
-    public float waitingStartTime = 4.0f;
+    public float waitingStartTime = 4.2f;
     private Texture countDown3;
     private Texture countDown2;
     private Texture countDown1;
     private Texture countDownGo;
+	private bool playedStart = false; //For controlling countdown sound
 
 	//Race end 
 	private bool isEnd = false;
 	private Texture winText;
 	private Texture looseText;
 	private bool ending = false;
+	private bool firstPosition = false; //Has the player win?
 
     void Start()
     {
@@ -50,13 +52,12 @@ public class MoveVehicle : MonoBehaviour {
 		transform.position = mWaypointsFactory.getWaypoint (0)
 			+ /*transform.TransformDirection */(offsetStartPosition); //WHY TRANSFORM??? 
 		if (isPlayerVehicle) { //Load textures
-			winText = (Texture)Resources.Load ("missileObj");
-			looseText = (Texture)Resources.Load ("shieldObj");
-            countDown3 = (Texture)Resources.Load("shieldObj");
-            countDown2 = (Texture)Resources.Load("shieldObj");
-            countDown1 = (Texture)Resources.Load("shieldObj");
-            countDownGo = (Texture)Resources.Load("shieldObj");
-
+			winText = (Texture)Resources.Load ("YouWin");
+			looseText = (Texture)Resources.Load ("YouLose");
+            countDown3 = (Texture)Resources.Load("3");
+            countDown2 = (Texture)Resources.Load("2");
+            countDown1 = (Texture)Resources.Load("1");
+            countDownGo = (Texture)Resources.Load("GO");
 		}
     }
 
@@ -66,6 +67,7 @@ public class MoveVehicle : MonoBehaviour {
             applyDirToVehicle();
             changeUpDirection();
             waitingStartTime -= Time.deltaTime;
+			if (isPlayerVehicle) lapsController.setPositionText (position);
             return;
         }
 
@@ -148,10 +150,18 @@ public class MoveVehicle : MonoBehaviour {
 		}
 	}
 
+	private bool checkFirstWayPoints(int closestWayPoint) {
+		bool result = false;
+		for (int i = 0; i < 6 && !result; ++i) {
+			result = result || (closestWayPoint == i && currentWayPoint != i);
+		}
+		return result;
+	}
+
 	private void checkHasLapBeenDone(){
 
 		int closestWaypoint = mWaypointsFactory.getCurrentWaypointIndex (gameObject.transform.position);
-		if (closestWaypoint == 0 && currentWayPoint != 0 && lapsCountDown <= 0.0f) {
+		if (lapsCountDown <= 0.0f && checkFirstWayPoints(closestWaypoint)) {
 			lapsCountDown = lapTime;
 			++lapsDone;
 			if (isPlayerVehicle) {
@@ -161,6 +171,7 @@ public class MoveVehicle : MonoBehaviour {
 				if (lapsDone == /*lapsController.maxLaps+ 1*/2) {
 					isEnd = true;
 					isPlayerVehicle = false; //Let the IA controll the vehicle once ended
+					firstPosition = position == 1;
 					//ADD sleep??
 					/*Dictionary<string,string> arguments = new Dictionary<string,string>();
 					arguments.Add ("position", position.ToString());
@@ -270,32 +281,29 @@ public class MoveVehicle : MonoBehaviour {
 		return speedZ;
 	}
 
+
 	void OnGUI() {
-        float Textwidth = 600;
-        float Textheight = 600;
-
+		float Textwidth = (Screen.width / 2);
+		float Textheight =  (Screen.height / 2);
         //For race beggining
-        if (isPlayerVehicle && waitingStartTime > 0.0f) {
-            //Textures centered on screen
-            //Substitute labels per textures!
-            if (waitingStartTime >= 2.5f) {
-                GUI.Label (new Rect (500, 100, 1000, 1000), "3..");
-                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown3);
-            }
-            else if (waitingStartTime >= 1.5f) {
-                GUI.Label(new Rect(500, 100, 1000, 1000), "2..");
-                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown2);
-            }
-            else if (waitingStartTime >= 0.5f) {
-                GUI.Label(new Rect(500, 100, 1000, 1000), "1..");
-                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown1);
-            }
-            else {
-                GUI.Label (new Rect (500, 100, 1000, 1000), "GO");
-                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDownGo);
-            }
-        }
+		if (isPlayerVehicle && waitingStartTime > 0.0f) {
 
+			if (!playedStart) {
+				AudioSource audio = gameObject.AddComponent < AudioSource > ();
+				audio.PlayOneShot ((AudioClip)Resources.Load ("start"));
+				playedStart = true;
+			}
+			//Textures centered on screen
+			if (waitingStartTime >= 2.5f) {
+				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown3, ScaleMode.ScaleToFit);
+			} else if (waitingStartTime >= 1.5f) {
+				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown2, ScaleMode.ScaleToFit);
+			} else if (waitingStartTime >= 0.5f) {
+				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown1, ScaleMode.ScaleToFit);
+			} else {
+				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDownGo, ScaleMode.ScaleToFit);
+			}
+		}
 
         //For race ending
 		if (isEnd) {
@@ -308,31 +316,25 @@ public class MoveVehicle : MonoBehaviour {
 
 				AudioSource audio = gameObject.AddComponent < AudioSource > ();
 				//Winner/looser sound
-				if (position ==1) 
+				if (firstPosition) 
 					audio.PlayOneShot ((AudioClip)Resources.Load ("fanfare"));
-
+				else
+					audio.PlayOneShot ((AudioClip)Resources.Load ("defeat"));
 			}
 
 			if (Input.GetKey (KeyCode.Space)) {//Return to main menu
-				GUI.Label (new Rect (500, 100, 100, 100), "Loading . . .");
+				GUI.Label (new Rect (Textwidth, Screen.height -100, 100, 100), "Loading . . .");
 				SceneManager.LoadScene ("GameMenu");
 			}
 
-			const int textXpos = 300;
-			const int textYpos = 300;
 			const int textXsize = 200;
 			const int textYsize = 200;
-			GUI.Label (new Rect (textXpos, textYpos, textXsize, textYsize), "Press space to return nto menu");
+			GUI.Label (new Rect (Textwidth , 0, textXsize, textYsize), "Press space to return to menu");
 
-            /* //Substitute labels per textures!
-            switch (position) {
-            case 1:
-                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), winText);
-                break;
-            default :
-                //GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), looseText);
-                break;
-            }*/
+			if (firstPosition)
+                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), winText,ScaleMode.ScaleToFit);
+            else
+				GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), looseText,ScaleMode.ScaleToFit);
         }
 	}
 }

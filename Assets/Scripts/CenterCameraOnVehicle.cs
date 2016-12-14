@@ -27,8 +27,8 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 			//nextPoint += camToUser * camToUserOffset;
             //nextPoint = mUserVehicle.transform.position;
 		} else {
-			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*20) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
-			nextPoint =  mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*15) + new Vector3 (0.0f, 10.0f, 0.0f);
+			prevPoint = mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*18) +  new Vector3 (0.0f, 10.0f, 0.0f) ; //Small y offset
+			nextPoint =  mWaypointsFactory.getWaypoint (wayPointV - wayPointsOffset*13) + new Vector3 (0.0f, 10.0f, 0.0f);
 		}
 
 		transform.position = prevPoint;
