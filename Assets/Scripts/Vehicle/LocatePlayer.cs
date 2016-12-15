@@ -8,6 +8,7 @@ public class LocatePlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        if (GetComponent<MoveVehicle>() == null) return;
 		if (GetComponent<MoveVehicle>() != null && !GetComponent<MoveVehicle>().isPlayerVehicle) return;
         Vector3 boxSize = GetComponent<BoxCollider>().size;
         lightInstance = (GameObject)Instantiate(lightPilar,transform.position, transform.rotation);
