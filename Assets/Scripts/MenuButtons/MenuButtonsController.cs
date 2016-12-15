@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class MenuButtonsController : MonoBehaviour {
@@ -65,6 +66,14 @@ public class MenuButtonsController : MonoBehaviour {
 
 		instructionsText.SetActive (isInstructions);
 		creditsText.SetActive (isCredits);
+
+		if (okButton.activeSelf) {
+
+			EventSystem.current.SetSelectedGameObject (okButton);
+		} else {
+		
+			EventSystem.current.SetSelectedGameObject (playButton);
+		}
 	}
 }
 
