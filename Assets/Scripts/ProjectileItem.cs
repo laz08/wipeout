@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class ProjectileItem : MonoBehaviour {
 
@@ -8,8 +9,25 @@ public class ProjectileItem : MonoBehaviour {
 
 	private GameObject vehicle;//Vehicle that has thrown this missile
 
+	AudioSource audioExpl;
+	AudioClip clipExpl;
+	float countDownToDestroy = 2.0f;
+	bool willBeDestroyed = false;
+
+	void Start() {
+		audioExpl = gameObject.AddComponent<AudioSource> ();
+		clipExpl = (AudioClip)Resources.Load ("Sounds/explosion");
+	}
+
 	// Update is called once per frame
 	void Update () {
+		if (willBeDestroyed) {
+			if (countDownToDestroy <= 0.0f)
+				Destroy (gameObject);
+			else
+				countDownToDestroy -= Time.deltaTime;
+		}
+
 		//Move towards
 		float vSpeed = vehicle.GetComponent<MoveVehicle>().getSpeed();
 		transform.Translate (0.0f,0.0f,(vSpeed*2+ speed)*Time.deltaTime,Space.Self);
@@ -33,6 +51,14 @@ public class ProjectileItem : MonoBehaviour {
 		//Auto destroy with explosion effect
 		Instantiate (explosion,transform.position,transform.rotation);
 		explosion.Play ();
-		Destroy (gameObject);
+		if (vehicle.GetComponent<MoveVehicle> ().isPlayerVehicle && !willBeDestroyed) {
+			GetComponent<BoxCollider> ().enabled = false;
+			GetComponent<MeshRenderer> ().enabled = false;
+			countDownToDestroy = 2.0f;
+			willBeDestroyed = true;
+			audioExpl.PlayOneShot (clipExpl);
+		}
+		else
+			Destroy (gameObject);
 	}
 }

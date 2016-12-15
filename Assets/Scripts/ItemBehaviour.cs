@@ -36,7 +36,8 @@ public class ItemBehaviour : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision){
 	
-		audio.PlayOneShot (explosionClip, 1.0f);
+		if (collision.gameObject.tag =="Vehicle" && collision.gameObject.GetComponent<MoveVehicle>().isPlayerVehicle)
+			audio.PlayOneShot (explosionClip, 1.0f);
 
 		countdownToRespawn = timeToRespawn;
 		Color itemColor = gameObject.GetComponent<MeshRenderer>().material.color;

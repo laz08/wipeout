@@ -24,7 +24,6 @@ public class VehiclesFactory : MonoBehaviour {
 
 
 		string paramVeh = AssemblyCSharp.SceneController.getParam (SELECTED_VEHICLE_KEY);
-		Debug.Log ("Param veh: " + paramVeh);
 		if (paramVeh != null) {
 
 			if (paramVeh.Equals (CORVETTE_VEHICLE)) {

@@ -27,12 +27,15 @@ public class MoveVehicle : MonoBehaviour {
 	public float actualPosition = 0.0f; //Position "score" depending on the waypoints and laps
 	public int position = 0;//Position of the vehicle (first,second,..)
 
+	//Damaging
 	private float timeDamaged = 3.0f;//Time damage animation takes
 	public float timeDamagedCountdown = 0.0f;
 
     //For IA
     private float turnCountdown = 0.0f;
     private float turnTime = 1.2f;
+	AudioSource audioExpl;
+	AudioClip clipExpl;
 
     //Race beggining
     public float waitingStartTime = 4.2f;
@@ -72,6 +75,8 @@ public class MoveVehicle : MonoBehaviour {
             audio = gameObject.AddComponent<AudioSource>();
             clipVictory = (AudioClip)Resources.Load("fanfare");
             clipDefeat = (AudioClip)Resources.Load("defeat");
+			audioExpl = gameObject.AddComponent<AudioSource> ();
+			clipExpl = (AudioClip)Resources.Load ("Sounds/explosion");
 		}
         turnTime = Random.value + Random.value + Random.value;
     }
@@ -89,7 +94,10 @@ public class MoveVehicle : MonoBehaviour {
 		if (lapsCountDown > 0)
 			lapsCountDown -= Time.deltaTime;
 		if (timeDamagedCountdown > 0.0f) { //Not move, damage animation
-		
+			if (timeDamagedCountdown == timeDamaged && isPlayerVehicle) {
+				audioExpl.PlayOneShot (clipExpl);
+			}
+			speedZ = 0.0f; //Reset velocity
 			timeDamagedCountdown -= Time.deltaTime;
 			transform.Rotate (0.0f, 240.0f*Time.deltaTime, 0.0f);
 		} else { //Can move
