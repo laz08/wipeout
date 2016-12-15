@@ -74,7 +74,6 @@ public class MoveVehicle : MonoBehaviour {
             clipDefeat = (AudioClip)Resources.Load("defeat");
 		}
         turnTime = Random.value + Random.value + Random.value;
-        Debug.Log(turnTime);
     }
 
 	// Update is called once per frame
