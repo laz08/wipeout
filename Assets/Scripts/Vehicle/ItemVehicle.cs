@@ -32,18 +32,30 @@ public class ItemVehicle : MonoBehaviour {
 
 	Vector3 boxSelf,boxProjectile;
 
+    //For player only
+    AudioSource audio;
+    AudioClip clip1; 
+
 	// Use this for initialization
-	void Start () {
-		projectileText = (Texture)Resources.Load ("missileObj");
-		bombText = (Texture)Resources.Load ("bombObj");
-		shieldText = (Texture)Resources.Load ("shieldObj");
-		turboText = (Texture)Resources.Load ("turboObj");
+    void Start()
+    {
+        projectileText = (Texture)Resources.Load("missileObj");
+        bombText = (Texture)Resources.Load("bombObj");
+        shieldText = (Texture)Resources.Load("shieldObj");
+        turboText = (Texture)Resources.Load("turboObj");
 
         actualItem = Items.NONE;
-		boxSelf = GetComponent<BoxCollider>().size;
-		boxProjectile = projectile.GetComponent<BoxCollider> ().size;
-	}
+        boxSelf = GetComponent<BoxCollider>().size;
+        boxProjectile = projectile.GetComponent<BoxCollider>().size;
 
+        if (isPlayer)
+        {
+            audio = gameObject.AddComponent<AudioSource>();
+            clip1 = (AudioClip)Resources.Load("fanfare");
+
+        }
+    }
+    
 	void OnGUI() { //Show actual item
 		if (!isPlayer)
 			return;
@@ -121,47 +133,59 @@ public class ItemVehicle : MonoBehaviour {
 		}
 	}
 
-	void activateItem() { //Throws actual item
-		if (actualItem == Items.TURBO) {
-			turboActivate = true;
-			turboCountDown = turboTime;
-		}
-		if (actualItem == Items.PROJECTILE) {
-			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z*2 + boxProjectile.z);
-			offset = transform.TransformVector (offset);
-			GameObject misil = (GameObject)Instantiate(projectile,transform.position + offset,transform.rotation);
-			misil.GetComponent<ProjectileItem>().setVehicle (gameObject);
-			//Increase missil size on second track
-			if (GetComponent<MoveVehicle> ().mWaypointsFactory as CreateSecondTRackWayPoints) {
-				misil.transform.localScale = new Vector3 (10.0f, 10.0f, 10.0f);
-			}
-			Physics.IgnoreCollision (misil.GetComponent<BoxCollider> (), GetComponent<BoxCollider> ());
-		}
-		if (actualItem == Items.BOMB) {
-			Vector3 offset = new Vector3 (0.0f,0.0f,boxSelf.z/2 + boxProjectile.z);
-			offset = transform.TransformVector (offset);
-			GameObject b = (GameObject)Instantiate(bomb,transform.position - offset,transform.rotation);
-			//Increase bomb size on second track
-			if (GetComponent<MoveVehicle> ().mWaypointsFactory as CreateSecondTRackWayPoints) {
-				b.transform.localScale = new Vector3 (40.0f, 40.0f, 40.0f);
-			}
-		}
-		if (actualItem == Items.SHIELD) {
-			if (!shieldDestroyed)
-				Destroy (shieldInstance);
-			shieldInstance = (GameObject)Instantiate (shield, transform.position, transform.rotation);
-			shieldInstance.transform.SetParent (transform);
-			float ScaleValue = 1.3f*Mathf.Max (Mathf.Max (boxSelf.x, boxSelf.y), boxSelf.z);
-			shieldInstance.transform.localScale = new Vector3 (ScaleValue, ScaleValue, ScaleValue);
-			Color itemColor = shieldInstance.GetComponent<MeshRenderer>().material.color;
-			itemColor.a = 0.4f;
-			shieldInstance.GetComponent<MeshRenderer>().material.color = itemColor;
-			shieldCountDown = shieldTime;
-			shieldDestroyed = false;
-		}
-		actualItem = Items.NONE;
-		if (isPlayer) itemActivatedEffect();//Set to NONE
-	}
+    void activateItem()
+    { //Throws actual item
+        if (actualItem == Items.TURBO)
+        {
+            turboActivate = true;
+            turboCountDown = turboTime;
+        }
+        if (actualItem == Items.PROJECTILE)
+        {
+            Vector3 offset = new Vector3(0.0f, 0.0f, boxSelf.z * 2 + boxProjectile.z);
+            offset = transform.TransformVector(offset);
+            GameObject misil = (GameObject)Instantiate(projectile, transform.position + offset, transform.rotation);
+            misil.GetComponent<ProjectileItem>().setVehicle(gameObject);
+            //Increase missil size on second track
+            if (GetComponent<MoveVehicle>().mWaypointsFactory as CreateSecondTRackWayPoints)
+            {
+                misil.transform.localScale = new Vector3(10.0f, 10.0f, 10.0f);
+            }
+            Physics.IgnoreCollision(misil.GetComponent<BoxCollider>(), GetComponent<BoxCollider>());
+        }
+        if (actualItem == Items.BOMB)
+        {
+            Vector3 offset = new Vector3(0.0f, 0.0f, boxSelf.z / 2 + boxProjectile.z);
+            offset = transform.TransformVector(offset);
+            GameObject b = (GameObject)Instantiate(bomb, transform.position - offset, transform.rotation);
+            //Increase bomb size on second track
+            if (GetComponent<MoveVehicle>().mWaypointsFactory as CreateSecondTRackWayPoints)
+            {
+                b.transform.localScale = new Vector3(40.0f, 40.0f, 40.0f);
+            }
+        }
+        if (actualItem == Items.SHIELD)
+        {
+            if (!shieldDestroyed)
+                Destroy(shieldInstance);
+            shieldInstance = (GameObject)Instantiate(shield, transform.position, transform.rotation);
+            shieldInstance.transform.SetParent(transform);
+            float ScaleValue = 1.3f * Mathf.Max(Mathf.Max(boxSelf.x, boxSelf.y), boxSelf.z);
+            shieldInstance.transform.localScale = new Vector3(ScaleValue, ScaleValue, ScaleValue);
+            Color itemColor = shieldInstance.GetComponent<MeshRenderer>().material.color;
+            itemColor.a = 0.4f;
+            shieldInstance.GetComponent<MeshRenderer>().material.color = itemColor;
+            shieldCountDown = shieldTime;
+            shieldDestroyed = false;
+        }
+        if (isPlayer)
+        {
+            itemActivatedEffect();//Set to NONE
+            //audio.PlayOneShot(clip1);
+        }
+        actualItem = Items.NONE;
+
+    }
 
     void OnCollisionEnter(Collision collision) {
         if (actualItem == Items.NONE && collision.gameObject.tag == "PowerUpItem") {

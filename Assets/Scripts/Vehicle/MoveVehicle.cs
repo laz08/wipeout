@@ -50,6 +50,9 @@ public class MoveVehicle : MonoBehaviour {
     private Texture loading;
 	private bool ending = false;
 	private bool firstPosition = false; //Has the player win?
+    AudioSource audio;
+    AudioClip clipVictory;
+    AudioClip clipDefeat;
 
     void Start()
     {
@@ -66,6 +69,9 @@ public class MoveVehicle : MonoBehaviour {
             countDownGo = (Texture)Resources.Load("GO");
             pressSpace = (Texture)Resources.Load("press_spacebar");
             loading = (Texture)Resources.Load("loading");
+            audio = gameObject.AddComponent<AudioSource>();
+            clipVictory = (AudioClip)Resources.Load("fanfare");
+            clipDefeat = (AudioClip)Resources.Load("defeat");
 		}
         turnTime = Random.value + Random.value + Random.value;
         Debug.Log(turnTime);
@@ -178,7 +184,7 @@ public class MoveVehicle : MonoBehaviour {
 
 				lapsController.setLapsDone (lapsDone);
 
-				if (lapsDone == lapsController.maxLaps+ 1) {
+				if (lapsDone == lapsController.maxLaps+1) {
 					isEnd = true;
 					isPlayerVehicle = false; //Let the IA controll the vehicle once ended
 					firstPosition = position == 1;
@@ -326,14 +332,12 @@ public class MoveVehicle : MonoBehaviour {
 				//stop all sounds
 				AudioSource[] audios = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
 				foreach (AudioSource aud in audios)
-					aud.Stop ();
-
-				AudioSource audio = gameObject.AddComponent < AudioSource > ();
+					aud.Stop ();             
 				//Winner/looser sound
 				if (firstPosition) 
-					audio.PlayOneShot ((AudioClip)Resources.Load ("fanfare"));
+                    audio.PlayOneShot(clipVictory);
 				else
-					audio.PlayOneShot ((AudioClip)Resources.Load ("defeat"));
+                    audio.PlayOneShot(clipDefeat);
 			}
 
 			if (Input.GetKey (KeyCode.Space)) {//Return to main menu
@@ -341,7 +345,7 @@ public class MoveVehicle : MonoBehaviour {
                 SceneManager.LoadScene("GameMenu");
 			}
 
-            GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 4), (Screen.height) - (Textheight / 4), Textwidth / 4, Textheight / 3), pressSpace, ScaleMode.ScaleToFit, true, 10.0F);
+            GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 4), (Screen.height) - (Textheight / 1.5f), Textwidth / 1.5f, Textheight / 1.5f), pressSpace, ScaleMode.ScaleToFit);
 
 			if (firstPosition)
                 GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), winText, ScaleMode.ScaleToFit);
