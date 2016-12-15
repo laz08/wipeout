@@ -12,8 +12,8 @@ public class ItemBehaviour : MonoBehaviour {
 
 	void Awake(){
 	
-		explosionClip = (AudioClip)Resources.Load ("Sounds/explosion");
-		audio = GetComponent<AudioSource> ();
+		explosionClip = (AudioClip)Resources.Load ("Sounds/shattering");
+		audio = gameObject.AddComponent<AudioSource> ();
 	}
 
 	// Update is called once per frame
