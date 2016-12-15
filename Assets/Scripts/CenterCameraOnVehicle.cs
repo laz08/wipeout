@@ -54,7 +54,7 @@ public class CenterCameraOnVehicle : MonoBehaviour {
 		}
 
         if (mUserVehicle.GetComponent<MoveVehicle>().timeDamagedCountdown > 0.0f) //being damaged, slow speed
-            speed /= 3.0f;
+            speed /= 4.0f;
 
 		//Change camera parameters
 		transform.position = Vector3.Lerp (transform.position, prevPoint, speed);

@@ -42,6 +42,8 @@ public class MoveVehicle : MonoBehaviour {
 	private bool isEnd = false;
 	private Texture winText;
 	private Texture looseText;
+    private Texture pressSpace;
+    private Texture loading;
 	private bool ending = false;
 	private bool firstPosition = false; //Has the player win?
 
@@ -58,6 +60,8 @@ public class MoveVehicle : MonoBehaviour {
             countDown2 = (Texture)Resources.Load("2");
             countDown1 = (Texture)Resources.Load("1");
             countDownGo = (Texture)Resources.Load("GO");
+            pressSpace = (Texture)Resources.Load("press_spacebar");
+            loading = (Texture)Resources.Load("loading");
 		}
     }
 
@@ -168,7 +172,7 @@ public class MoveVehicle : MonoBehaviour {
 
 				lapsController.setLapsDone (lapsDone);
 
-				if (lapsDone == /*lapsController.maxLaps+ 1*/2) {
+				if (lapsDone == lapsController.maxLaps+ 1) {
 					isEnd = true;
 					isPlayerVehicle = false; //Let the IA controll the vehicle once ended
 					firstPosition = position == 1;
@@ -295,13 +299,13 @@ public class MoveVehicle : MonoBehaviour {
 			}
 			//Textures centered on screen
 			if (waitingStartTime >= 2.5f) {
-				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown3, ScaleMode.ScaleToFit);
+                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown3, ScaleMode.ScaleToFit);
 			} else if (waitingStartTime >= 1.5f) {
-				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown2, ScaleMode.ScaleToFit);
+                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown2, ScaleMode.ScaleToFit);
 			} else if (waitingStartTime >= 0.5f) {
-				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown1, ScaleMode.ScaleToFit);
+                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDown1, ScaleMode.ScaleToFit);
 			} else {
-				GUI.DrawTexture (new Rect ((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDownGo, ScaleMode.ScaleToFit);
+                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), countDownGo, ScaleMode.ScaleToFit);
 			}
 		}
 
@@ -323,18 +327,16 @@ public class MoveVehicle : MonoBehaviour {
 			}
 
 			if (Input.GetKey (KeyCode.Space)) {//Return to main menu
-				GUI.Label (new Rect (Textwidth, Screen.height -100, 100, 100), "Loading . . .");
-				SceneManager.LoadScene ("GameMenu");
+                GUI.DrawTexture(new Rect((Screen.width) - (Textwidth / 4), (Screen.height) - (Textheight / 4), Textwidth / 4, Textheight / 4), loading, ScaleMode.ScaleToFit, true, 10.0F);
+                SceneManager.LoadScene("GameMenu");
 			}
 
-			const int textXsize = 200;
-			const int textYsize = 200;
-			GUI.Label (new Rect (Textwidth , 0, textXsize, textYsize), "Press space to return to menu");
+            GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 4), (Screen.height) - (Textheight / 4), Textwidth / 4, Textheight / 3), pressSpace, ScaleMode.ScaleToFit, true, 10.0F);
 
 			if (firstPosition)
-                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), winText,ScaleMode.ScaleToFit);
+                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), winText, ScaleMode.ScaleToFit);
             else
-				GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), looseText,ScaleMode.ScaleToFit);
+                GUI.DrawTexture(new Rect((Screen.width / 2) - (Textwidth / 2), (Screen.height / 2) - (Textheight / 2), Textwidth, Textheight), looseText, ScaleMode.ScaleToFit);
         }
 	}
 }

@@ -15,9 +15,12 @@ public class MapSelectionController : MonoBehaviour {
 
 	public float rotationSpeed = 75;
 
+    private bool selectedMap = false;
+    private Texture loading;
 
 	void Awake() {
-		
+        loading = (Texture)Resources.Load("loading");
+
 	}
 
 	void Update(){
@@ -29,11 +32,12 @@ public class MapSelectionController : MonoBehaviour {
 	public void onNormalSelected(){
 
 		SceneManager.LoadScene (FIRST_TRACK_NAME);
+        selectedMap = true;
 	}
 
 	public void onTorusSelected(){
 
-
+        selectedMap = true;
 		SceneManager.LoadScene (SECOND_TRACK_NAME);
 	}
 
@@ -41,4 +45,14 @@ public class MapSelectionController : MonoBehaviour {
 
 		SceneManager.LoadScene(VEHICLE_SELECT_SCREEN_NAME);
 	}
+
+    void OnGUI()
+    {
+        if (selectedMap)
+        {
+            float Textwidth = (Screen.width / 2);
+            float Textheight = (Screen.height / 2);
+            GUI.DrawTexture(new Rect((Screen.width) - (Textwidth / 4), (Screen.height) - (Textheight / 4), Textwidth / 4, Textheight / 4), loading, ScaleMode.ScaleToFit,true,10.0f);
+        }
+    }
 }
