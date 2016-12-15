@@ -8,7 +8,7 @@ public class LocatePlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        if (!GetComponent<MoveVehicle>().isPlayerVehicle) return;
+		if (GetComponent<MoveVehicle>() != null && !GetComponent<MoveVehicle>().isPlayerVehicle) return;
         Vector3 boxSize = GetComponent<BoxCollider>().size;
         lightInstance = (GameObject)Instantiate(lightPilar,transform.position, transform.rotation);
         lightInstance.transform.parent = transform;
@@ -17,6 +17,8 @@ public class LocatePlayer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (GetComponent<MoveVehicle> () == null)
+			return;
         float startTime = GetComponent<MoveVehicle>().waitingStartTime;
         if (startTime <= 0.0f) Destroy(lightInstance);
 	}
