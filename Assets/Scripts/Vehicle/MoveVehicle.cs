@@ -14,7 +14,7 @@ public class MoveVehicle : MonoBehaviour {
 
 	//Movement in X Axis.
 	public float xAxisSpeed = 15.0f;
-	public bool isPlayerVehicle = true;
+	public bool isPlayerVehicle = false;
 
 	public Vector3 offsetStartPosition = new Vector3 (0, 0, 0);
 
@@ -29,6 +29,10 @@ public class MoveVehicle : MonoBehaviour {
 
 	private float timeDamaged = 3.0f;//Time damage animation takes
 	public float timeDamagedCountdown = 0.0f;
+
+    //For IA
+    private float turnCountdown = 0.0f;
+    private float turnTime = 1.2f;
 
     //Race beggining
     public float waitingStartTime = 4.2f;
@@ -63,6 +67,8 @@ public class MoveVehicle : MonoBehaviour {
             pressSpace = (Texture)Resources.Load("press_spacebar");
             loading = (Texture)Resources.Load("loading");
 		}
+        turnTime = Random.value + Random.value + Random.value;
+        Debug.Log(turnTime);
     }
 
 	// Update is called once per frame
@@ -224,13 +230,17 @@ public class MoveVehicle : MonoBehaviour {
 	 * Moves vehicle forward.
 	 */
 	float turnVehicleAutomatic(){
+        turnCountdown -= Time.deltaTime;
+        if (turnCountdown > 0.0f) 
+            return 0.0f;
 
+        turnCountdown = turnTime;
 		float shouldTurn = Random.value;
-		if (shouldTurn <= 0.6f) {
+		if (shouldTurn <= 0.5f) {
 
 			return 0;
 		}
-		if(shouldTurn > 0.60f && shouldTurn < 0.75f) {
+		if(shouldTurn > 0.65f && shouldTurn < 0.80f) {
 
 			return xAxisSpeed * Time.deltaTime;
 		}

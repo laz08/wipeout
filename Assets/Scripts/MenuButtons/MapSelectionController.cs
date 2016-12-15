@@ -30,16 +30,17 @@ public class MapSelectionController : MonoBehaviour {
 	}
 
 	public void onNormalSelected(){
-
+        SceneManager.UnloadScene(FIRST_TRACK_NAME);//RESET SCENE!
 		SceneManager.LoadScene (FIRST_TRACK_NAME);
         selectedMap = true;
 	}
 
 	public void onTorusSelected(){
-
-        selectedMap = true;
+        SceneManager.UnloadScene(SECOND_TRACK_NAME);//RESET SCENE!
 		SceneManager.LoadScene (SECOND_TRACK_NAME);
-	}
+        selectedMap = true;
+    
+    }
 
 	public void onBackSelected(){
 
