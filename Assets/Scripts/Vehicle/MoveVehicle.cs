@@ -82,7 +82,7 @@ public class MoveVehicle : MonoBehaviour {
             applyDirToVehicle();
             changeUpDirection();
             waitingStartTime -= Time.deltaTime;
-			if (isPlayerVehicle) lapsController.setPositionText (position);
+			//if (isPlayerVehicle) lapsController.setPositionText (position);
             return;
         }
 
@@ -236,9 +236,9 @@ public class MoveVehicle : MonoBehaviour {
 	 */
 	float turnVehicleAutomatic(){
         turnCountdown -= Time.deltaTime;
-        if (turnCountdown > 0.0f) 
-            return 0.0f;
-
+		if (turnCountdown > 0.0f) {
+			return 0.0f;
+		}
         turnCountdown = turnTime;
 		float shouldTurn = Random.value;
 		if (shouldTurn <= 0.5f) {
