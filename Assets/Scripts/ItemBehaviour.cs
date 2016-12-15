@@ -1,10 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class ItemBehaviour : MonoBehaviour {
 
 	private float timeToRespawn = 5.0f;
 	private float countdownToRespawn = 0.0f;
+
+	private AudioSource audio;
+	private AudioClip explosionClip;
+
+	void Awake(){
+	
+		explosionClip = (AudioClip)Resources.Load ("Sounds/explosion");
+		audio = GetComponent<AudioSource> ();
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -25,6 +35,9 @@ public class ItemBehaviour : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision){
+	
+		audio.PlayOneShot (explosionClip, 1.0f);
+
 		countdownToRespawn = timeToRespawn;
 		Color itemColor = gameObject.GetComponent<MeshRenderer>().material.color;
 		itemColor.a = 0.0f;
